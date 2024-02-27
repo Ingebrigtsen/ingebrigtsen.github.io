@@ -1,0 +1,16 @@
+---
+title: "A newbies Mac-owners perspective"
+date: "2008-09-13"
+---
+
+A little more than a month ago I got my first Mac ever; a MacBook Pro 2.4GHz w/4 gigs of memory. The background for this was that I was going to have focus on Silverlight development in my new job at Objectware, but also out of curiousity on a personal level. It is a bit funny that I would go to the length of getting a Mac. No more than a year ago (this is kinda embarassing), I was really ridiculing a guy at work for talking about Mac all the time. I was truly a Windows man at heart and soul. I ran into this guy today and felt I had to apologize to him for the incidents and running into him is probably why this post came about.  
+  
+My first months experience with the Mac has been quite good. Being a devoted Windows user I was expecting to miss Windows features quite fast. I am today using Parallels to boot by Boot Camp installation of Vista (yes I know, I could get better performance with Windows XP or even better the Tiny XP distribution - but I use it for quite a few things). I had a goal of trying to minimize the number of applications on the Windows installation to 1; Visual Studio. This turned out to be utopia; now I have the following installed: Visual Studio 2008, Reflector, Expression Blend 2.5, SQL Server 2005 Management Studio Express, InfoPath 2007, RSS Bandit. Still not bad, considering I used to have some 40-50 applications installed at least on my Windows installations before. Now on the other hand, everything resides on the Mac OSX part of the computer.  
+  
+So, have I had any typically moments of real pain? Thus far I must say no. Sure, there has been a couple of times I've been wondering why a certain feature is missing, or why I can't seem to find it. But after some googling I've either found out how a feature worked or filled the gap with 3rd party software. The biggest change for me, would be the fact that free Mac software is not something that you'll be able to find for all scenarios. It started of for me when I wanted a good Torrent client (for downloading only legal stuff, of course). Sure, there was BitTorrent, but in reality it kinda sucked. The best one I found was XTorrent, and it had a $29 pricetag (do you see the irony??). Being a software developer I am a strong believer that software cost money, so I just have to adjust to not finding everything for free.  
+  
+The second biggest thing I've experienced since I got my Mac is the usual comments from everyone who does not own or have really tried a Mac. Especially when a problem occurs; ".. ahh, it's because you've got a Mac you get this problem.." People are really sceptic, like I was just a year ago - so I know were they're coming from.  
+  
+As many have noticed, Apple has had a real boost in sales the last couple of years and I am really getting why, but still; Being a Windows developer and hold a lot of Microsoft software dear to me, I hope Microsoft learns from what Apple has done right and creates an experience that is better than they deliver today. Sure, Vista is nice and all, but there is a quite a bit to desire still. Hopefully we'll see good stuff at PDC that will show us what way Microsoft is heading.  
+  
+Ahhh.. Well..  Back to writing some code in my VS2008 on the Parallels Vista Desktop located on Space2 in my Spaces configuration. :)

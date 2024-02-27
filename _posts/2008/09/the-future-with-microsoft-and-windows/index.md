@@ -1,0 +1,20 @@
+---
+title: "The future with Microsoft and Windows"
+date: "2008-09-23"
+---
+
+I figured I'd give it a go and give my perspective and opinion on what I think Microsoft should do to keep their stand as the marketleader for operating systems (and other software). The last couple of years, the market has shiftet a bit. Apple has been eating slowly into the marketshare, not a true threadt yet - but... This is a good thing, competition is a good thing in all aspects of the software industry. The reason for the shift, I think is complex. Vista got a really bad start with really bad publicity. Some of the bad attention Vista got was deserved, but for the most part I felt it was not fair. I for one was an early adopter and ran it on poor hardware, but didn't have the same issues as "everyone else" - if you were to believe the media. Sure I had some issues, but as a general it felt good.  
+  
+That said, there are a couple of issues still, one of the biggest I think Windows has today is its legacy support. Windows is pretty much supporting stuff back to the beginning of the Microsoft adventure of the first DOS. I can understand that legacy support has been really important for Microsoft in order to get to that market position they have today, but things are changing and people are becoming less and less loyal to the operating system and are looking beyond the OS and wants to be able to do certain tasks with the least amount of hassle. Sure, Microsoft delivers all this today with both Windows XP and Vista. People get to connect to the internet, read their mail, socialize through services such as messenger. But still, some of the trouble with the platform today that is causing speed issues and possibly instability, I think can be related to their dedicated legacy support.  
+  
+**The Apple way  
+**Apple and its users has a very different relationship alltogether. Legacy support is pretty much not something Apple need to care about. If one would translate the support into Microsoft terms, the support would be something like this; "we're supporting Windows Vista and Windows Vista SP1". Mac OS 10.5 and 10.4 is pretty much what you need to consider when creating software on the Mac platform. They should consider themselves lucky. In addition, Apple has 100% control over the hardwareplatform. Of course, the computers have USB ports and Firewire ports, the hardware you're plugging in needs drivers and there is a chance Apple didn't provide them as part of the OS. This is were the Windows users are truly spoiled; the OS comes with drivers for 10 year old hardware.    
+  
+**Clean slate  
+**So, how could Microsoft go about starting with a clean slate; no windows - something completely new. I think by far the most important product Microsoft has released this year is their Hypervisor. With this as the underlying platform one could easily scrap Windows all together, build a new operating that resides on top of the Hypervisor and provide legacy support for legacy applications by hosting them in a seamless matter through the Hypervisor. Microsoft would need to make a stand and say; let's come together and define the new platform for PCs with a minimum requirement. Scrap support for legacy hardware, design everything from the bottom up. The integration of Windows would have to be completely seamless, much like coherence is for Parallels on the Mac. You wouldn't notice that you were running a Windows application or a "Medori" application. Best of both worlds.  
+  
+In addition to the technical "mumbo-jumbo", Microsoft should start considering getting the coolnes factor that Apple has managed to get into their products. And a completely consistent look and feel, not only for the operating system and its facilities but also in applications running on it as well.  
+  
+Being a Microsoft technology entusiast and evangelist, I have a strong believe in their commitment to providing the best tools to the market. Not only for me as a developer, but also to other aspects of mine and others life.  
+  
+That was my 20 cents for today.. :)
