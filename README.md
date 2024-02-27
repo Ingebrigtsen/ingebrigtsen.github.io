@@ -13,5 +13,9 @@ echo "chruby ruby-3.2.3" >> ~/.zshrc # run 'chruby' to see actual version
 ```
 
 ```shell
+bundle
+```
+
+```shell
 bundle exec jekyll serve --drafts --livereload
 ```
