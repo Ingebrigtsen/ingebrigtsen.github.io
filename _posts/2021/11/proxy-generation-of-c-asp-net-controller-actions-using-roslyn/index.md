@@ -87,7 +87,7 @@ The way we do generation is basically through [templates](https://github.com/aks
 
 One of the bonuses one gets with doing this is that the new hot reload functionality of .NET 6 makes for a very tight feedback loop with these type of source generators as well. While running with `dotnet watch run` - it will continuously run while I'm editing in the C# code that is being marked as candidates by the syntax receiver. Below you'll see C# on the right hand side while TypeScript is being generated on the left hand side while typing. Keep in mind though, if you have something that generates files with a filename based on something in the original code, you might find some interesting side-effects (ask me how I know 😂).
 
-[![](images/2021-11-01_13-06-45-2.gif)](https://ingebrigtsen.blog/wp-content/uploads/2021/11/2021-11-01_13-06-45-2.gif)
+[![](images/2021-11-01_13-06-45-2.gif)](http://localhost:8080/wp-content/uploads/2021/11/2021-11-01_13-06-45-2.gif)
 
 ## Conclusion
 
