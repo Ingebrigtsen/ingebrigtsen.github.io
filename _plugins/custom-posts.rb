@@ -4,19 +4,19 @@ module Jekyll
         priority :high
     
         def generate(site)
-            custom_files_path = "_posts"
-            Dir.glob(File.join(site.source, custom_files_path, "**/*.md")).each do |post_file|
+            Dir.glob(File.join(site.source, "_posts", "**/*.md")).each do |post_file|
                 process_post(site, post_file)
             end            
         end
 
-        def process_post(site, custom_file)
-            post = Document.new(custom_file, {
+        def process_post(site, post_file)
+            post = Document.new(post_file, {
                 site: site,
                 collection: site.collections['posts']
             })
 
             post.read
+            post.content = post.content.gsub(/\(images\//, '({{ page.url | relative_url }}images/')
 
             post.data["slug"] = post.data["title"]
             site.collections['posts'].docs << post

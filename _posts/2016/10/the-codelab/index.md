@@ -7,7 +7,7 @@ I’ve been wanting to try out a new format, or at least a new format for me; li
 
 The concept is called “The Code Lab”;
 
-![TheCodeLab.png](./images/TheCodeLab-300x182.png)
+![TheCodeLab.png](images/TheCodeLab-300x182.png)
 
 I will be using the Facebook live video streaming system for this and you’ll find the Facebook page for the concept [here](http://thecodelab.tv/).
 
@@ -15,7 +15,6 @@ I will be using the Facebook live video streaming system for this and you’ll f
 
 First airing will be on Friday the 4th of November @ 13:00 CET (1PM), [here](http://thecodelab.tv/).
 
- 
 
 # What can you expect?
 
