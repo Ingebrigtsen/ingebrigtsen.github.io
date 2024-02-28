@@ -7,7 +7,7 @@ categories:
   - "code-tips"
 tags: 
   - "asp-net-core"
-  - "c"
+  - "c#"
   - "productivity"
   - "websockets"
 ---

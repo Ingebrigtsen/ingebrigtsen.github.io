@@ -6,7 +6,7 @@ categories:
   - "csharp"
   - "code-quality"
 tags: 
-  - "c"
+  - "c#"
   - "productivity"
 ---
 

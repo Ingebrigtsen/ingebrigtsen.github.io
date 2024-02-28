@@ -7,7 +7,7 @@ categories:
   - "code-tips"
   - "practices"
 tags: 
-  - "c"
+  - "c#"
 ---
 
 Back in 2015, I wrote about [concepts](https://www.ingebrigtsen.info/2015/02/03/concepts-and-more/). The idea behind these are that you encapsulate types that has meaning to your domain as well known types. Rather than relying on technical types or even primitive types, you then formalize these types as something you use throughout your codebase. This provides you with a few benefits, such as readability and potentially also give you compile time type checking and errors. It does also provide you with a way to adhere to the [element of least surprise](https://en.wikipedia.org/wiki/Principle_of_least_astonishment) principle. Its also a great opportunity to use the encapsulation to deal with cross cutting concerns, for instance values that adhere to compliance such as GDPR or security concerns where you want to encrypt while in motion etc.
