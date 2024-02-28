@@ -16,9 +16,10 @@ module Jekyll
             })
 
             post.read
+            post.data["slug"] = post.data["title"]
+
             post.content = post.content.gsub(/\(images\//, '({{ page.url | relative_url }}images/')
 
-            post.data["slug"] = post.data["title"]
             site.collections['posts'].docs << post
           end         
     end
