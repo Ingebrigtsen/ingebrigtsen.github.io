@@ -5,6 +5,7 @@ baseurl: ""
 url: "https://ingebrigtsen.blog"
 twitter_username: einari
 github_username: einari
+avatar: /assets/images/myself.jpg
 
 markdown: kramdown
 paginate: 10
