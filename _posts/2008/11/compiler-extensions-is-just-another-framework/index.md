@@ -37,15 +37,15 @@ public class MyNotifyingObject : INotifyPropertyChanging
     {  
        get  
        {  
-          return this.\_name;  
+          return this._name;  
        }  
   
        set  
        {  
-          if ((this.\_name != value))  
+          if ((this._name != value))  
           {  
              this.OnPropertyChanging("Name");  
-             this.\_name = value;  
+             this._name = value;  
              this.OnPropertyChanged("Name");  
           }  
        }  

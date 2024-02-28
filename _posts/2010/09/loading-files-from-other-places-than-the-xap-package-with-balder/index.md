@@ -19,15 +19,18 @@ The schemes you return should only be the name of the scheme, without the "://" 
 ```csharp  
 public class WcfFileLoader : Balder.Content.IFileLoader  
 {  
-public Stream GetStream(string fileName)  
-{  
-// Do magical WCF calls and return a stream  
+    public Stream GetStream(string fileName)  
+    {  
+        // Do magical WCF calls and return a stream  
+    }  
+
+    public bool Exists(string fileName)  
+    {  
+        // Do some more magical WCF calls and return wether or not the file exists  
+    }  
+
+    public string[] SupportedSchemes { get { return [] { "wcf" }; } 
 }  
-public bool Exists(string fileName)  
-{  
-// Do some more magical WCF calls and return wether or not the file exists  
-}  
-public string\[\] SupportedSchemes { get { return \[\] { "wcf" }; } }  
 ```
 
 The filename would then be something like : "wcf://my3DModel.ase".
