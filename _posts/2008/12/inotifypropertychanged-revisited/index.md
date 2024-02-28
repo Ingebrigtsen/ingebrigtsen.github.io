@@ -19,7 +19,7 @@ The environments are heavily relying on the objects implementing INotifyProperty
 This works out fine, with the exception of we as developers have to plumb in this code in all our objects.  
 Normally you would write something like :  
   
-\[code:c#\]  
+```csharp  
 public class Employee : INotifyPropertyChanged  
 {  
     public event PropertyChangedEventHandler PropertyChanged;  
@@ -43,7 +43,7 @@ public class Employee : INotifyPropertyChanged
         }  
     }  
 }  
-\[/code\]  
+```  
   
 One can easily see that the above code can become quite boring to write over and over again. A solution could be to put the frequently used bits in a base class for all your objects. But this steals inheritance.  
   
@@ -55,7 +55,7 @@ I started playing again with the problem a bit today and came up with a solution
 
 _**Update: 16th of December 2008, thanks to [Miguel Madero](http://www.miguelmadero.com/)**_ _**for pointing out the problem with value types.**_
 
-\[code:c#\]  
+```csharp  
     public static class NotificationExtensions  
     {  
         public static void Notify(this PropertyChangedEventHandler eventHandler, Expression<Func<object>> expression)  
@@ -84,11 +84,11 @@ _**Update: 16th of December 2008, thanks to [Miguel Madero](http://www.miguelmad
             }  
         }  
    }  
-\[/code\]  
+```  
   
 When having the extension method above within reach, you will get the Notify() extension method for the PropertyChanged event in your class. The usage is then very simple. Lets revisit our Employee class again.  
    
-\[code:c#\]  
+```csharp  
   
 public class Employee : INotifyPropertyChanged  
   
@@ -120,7 +120,7 @@ public class Employee : INotifyPropertyChanged
   
 }  
   
-\[/code\]  
+```  
   
   
 This is a highly reusable and pretty compact technique, and if you're not like me and aren't all that agressive with putting "this." all over the place, it will be even more compact. :)  
@@ -129,7 +129,7 @@ _**Update**_, _**16th of December 2008:**_
 
 Since my original post, I also added a SubscribeToChange() extension method. The reason for this is pretty much that I literally don't like literals and wanted to have the ability to subscribe to changes for a specific property.
 
-\[code:c#\]  
+```csharp  
         public static void SubscribeToChange<T>(this T objectThatNotifies, Expression<Func<object>> expression, PropertyChangedEventHandler<T> handler)  
             where T : INotifyPropertyChanged  
         {  
@@ -155,19 +155,19 @@ Since my original post, I also added a SubscribeToChange() extension method. The
                         }  
                     };  
         }  
-\[/code\]
+```
 
 The above code extends classes that implements INotifyPropertyChanged and gives you a syntax like  follows for subscribing to events:
 
-\[code:c#\]  
+```csharp  
 myObject.SubscripeToChange(()=>myObject.SomeProperty,SomeProperty\_Changed);  
-\[/code\]
+```
 
  And then your handler would look like this:
 
-\[code:c#\]  
+```csharp  
 private void SomeProperty\_Changed(MyObject myObject)  
 {  
     /\* ... implement something here \*/  
 }  
-\[/code\]
+```

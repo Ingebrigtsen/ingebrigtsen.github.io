@@ -20,7 +20,7 @@ Another good place were you'd might look at having compiler extensions are the p
 Typically you would do the following:  
   
   
-\[code:c#\]  
+```csharp  
 public class MyNotifyingObject : INotifyPropertyChanging  
 {  
     public event PropertyChangedEventHandler PropertyChanging;  
@@ -51,22 +51,22 @@ public class MyNotifyingObject : INotifyPropertyChanging
        }  
     }  
 }  
-\[/code\]  
+```  
   
 A more expressive way could be:  
   
-\[code:c#\]  
+```csharp  
 public class MyNotifyingObject  
 {  
     public notify string Name { get; set; }  
 }  
-\[/code\]  
+```  
   
   
   
 If you ever worked with WPF or Silverlight, you know the tedious parts where you want to have DependencyProperties on your controls. The syntax is like this:  
   
-\[code:c#\]  
+```csharp  
 public static readonly DepedencyProperty MyStringProperty =  
                   DependencyProperty.Register("MyString", typeof(string), typeof(ParentType), null);  
   
@@ -81,13 +81,13 @@ public string MyString
            this.SetValue(MyStringProperty,value);  
      }  
 }  
-\[/code\]  
+```  
   
 Wouldn't it be a lot more expressive if we could just do:  
   
-\[code:c#\]  
+```csharp  
 public dependent string MyString { get; set; }  
-\[/code\]  
+```  
   
 The way a compiler extension would handle this, is to fill in all the code found above to make it all work like if you were to write it all. We would get a more expressive code and actually get rid of potential problems with the literal declaring the name of the property as we do today.  
 **  

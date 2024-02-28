@@ -15,18 +15,18 @@ I've grown quite fond of WPF and Silverlight, and find the architecture behind b
   
 Lets say you have a ViewModel object, and on it you have a State property you wish to expose and make visible and bindable in Xaml:  
   
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {  
      public ViewState State { get; set; }  
 }  
-\[/code\]  
+```  
   
   
 **DependencyProperty out of the box**  
 In order for this to become a DependencyProperty and something we can bind against in Xaml, we have to do the following:  
   
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {  
      public static readonly DependencyProperty StateProperty =  
@@ -37,7 +37,7 @@ public class ViewModel
          set { this.SetValue(StateProperty,value); }  
      }  
 }  
-\[/code\]  
+```  
   
 If you wanted to get notified if the property changed from databinding or similar, you would have to specify propertymetadata with a handler as the last argument for the Register method.  
 Its not too bad, but it is error-prone - there is a literal there specifying the name of the property. This has to match the actual name of the property. Hardly refactorable.  
@@ -48,7 +48,7 @@ What I've created for my project are 3 classes that can be used seperately or to
   
 **DependencyPropertyHelper  
   
-**\[code:c#\]  
+**```csharp  
 public static class DependencyPropertyHelper  
 {  
     public static DependencyProperty Register<T, TResult>(Expression<Func<T, TResult>> expression)  
@@ -91,12 +91,12 @@ public static class DependencyPropertyHelper
         return prop;  
     }  
 }  
-\[/code\]  
+```  
   
 The helper have the assumption that any change callback should just set the property value directly.  
 With this helper, we can at least make our dependency properties refactorable:  
   
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {  
      public static readonly DependencyProperty StateProperty =  
@@ -107,13 +107,13 @@ public class ViewModel
          set { this.SetValue(StateProperty,value); }  
      }  
 }  
-\[/code\]  
+```  
   
 But still, we have the problem with the SetValue() in the property. So we need a second helping hand to make it all tick. Introducing the DependencyPropertyExtensions class:  
 **  
 DependencyPropertyExtensions  
   
-**\[code:c#\]  
+**```csharp  
 public static class DependencyPropertyExtensions  
 {  
     public static void SetValue<T>(this DependencyObject obj, DependencyProperty property, T value)  
@@ -134,11 +134,11 @@ public static class DependencyPropertyExtensions
         return (T)obj.GetValue(property);  
     }  
 }  
-\[/code\]  
+```  
   
 With this in place, we can do the following:  
   
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {  
      public static readonly DependencyProperty StateProperty =  
@@ -149,7 +149,7 @@ public class ViewModel
          set { this.SetValue<ViewState>(StateProperty,value); }  
      }  
 }  
-\[/code\]  
+```  
   
 Our code will now work as planned, and we can start putting any logic we want in the set method.  
   
@@ -157,7 +157,7 @@ Our code will now work as planned, and we can start putting any logic we want in
 Still, it could get better than this.  
 The DependencyProperty class can live anywhere, so we can actually wrap it all up in a new class that utilizes the other two classes:  
   
-\[code:c#\]  
+```csharp  
 public class TypeSafeDependencyProperty<T1,T>  
 {  
     private readonly DependencyProperty \_dependencyProperty;  
@@ -198,10 +198,10 @@ public class TypeSafeDependencyProperty<T1,T>
         return typeSafeProperty;  
     }  
 }  
-\[/code\]  
+```  
   
 Our property can then be implemented as follows:  
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {  
      public static readonly TypeSafeDependencyProperty<ViewModel,ViewState> StateProperty =  
@@ -212,7 +212,7 @@ public class ViewModel
          set { StateProperty.SetValue(this,value); }  
      }  
 }  
-\[/code\]  
+```  
   
   
 **Conclusion  

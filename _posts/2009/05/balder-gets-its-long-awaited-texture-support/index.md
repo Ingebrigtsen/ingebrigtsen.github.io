@@ -21,7 +21,7 @@ With the new [software rendering technique](/post/2009/05/05/Software-rendering-
 After getting the image loading in place, it was off to write the texturemapping support. With the generic implementation we have for doing triangle drawings at the moment, the task ended up being quite simple.  
 A snippet from the SimpleSpanRenderer as an illustration:
 
-\[code:c#\]  
+```csharp  
         public void Texture(IBuffers buffer, Span span, Image image, ImageContext texture)  
         {  
             var spreadCount = span.XEnd - span.XStart;  
@@ -69,7 +69,7 @@ A snippet from the SimpleSpanRenderer as an illustration:
                 depthBufferOffset++;  
             }  
         }  
-\[/code\]
+```
 
 Finally we had to add support for materials in the ASE file loader, I ended up spending too much time trying to figure out a good way to do it with regular expression, ending up with also adding a project by [Joshua Flanagan](http://flimflan.com/blog/default.aspx) called [Readable Regular Expressions](http://flimflan.com/blog/ReadableRegularExpressions.aspx) in combination with [LINQ to RegEx](http://weblogs.asp.net/rosherove/archive/2008/05/06/introducing-linq-to-regex.aspx) by [Roy Osherove.](http://weblogs.asp.net/rosherove/) Both projects are now part of the Balder repository as well. The reason for adding them to the repository is for maintenance purposes, seeing that we're targeting Balder for multiple platforms. The better way would probably be to contribute to the projects so they had the modifications or support we need to have for Balder. 
 

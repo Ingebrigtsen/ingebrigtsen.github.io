@@ -10,7 +10,7 @@ Lately I've been doing quite a bit of control development, both custom controls 
 **Finding a storyboard for a specific visual state  
 **When dealing with visual states, I tend to want to modify content of the storyboard programatically or I want on occasion to hook up to the completed event to be notified when the transition to the new state is finished. To do this, we need to get the storyboard. The below code is something I use for UserControls and is relying on the existense of a Control called "LayoutRoot". This could be rewritten  to extend Control and you could work the layoutroot instead of the UserControl.  
   
-\[code:c#\]  
+```csharp  
         public static Storyboard GetStoryboardForState(this UserControl control, string stateName)  
         {  
             Storyboard stateStoryboard = null;  
@@ -30,12 +30,12 @@ Lately I've been doing quite a bit of control development, both custom controls 
             }  
             return stateStoryboard;  
         }  
-\[/code\]  
+```  
   
 **Hooking up to the storyboard completed event for a transition for a state change  
 **As mentioned above, I like to hook up to the storyboard completed event to know when a storyboard of a transition between two states is finished. This can be done by using the above code and the following:  
   
-\[code:c#\]  
+```csharp  
         public static void AddStateCompletedEventHandler(this UserControl control, string stateName, EventHandler stateChanged)  
         {  
             Storyboard stateStoryboard = control.GetStoryboardForState(stateName);  
@@ -44,12 +44,12 @@ Lately I've been doing quite a bit of control development, both custom controls 
                 stateStoryboard.Completed += (s, e) => stateChanged(s, new EventArgs());  
             }  
         }  
-\[/code\]  
+```  
   
 **Setting a value for a specific named keyframe within a storyboard  
 **Storyboards within a visual state is not programatically accessible, even though you through in the x:Name="" attribute. Therefor I created a helper for setting a specific value - this one only supports doubles, seeing that was the only datatype I was using for the controls I was developing. Extending this should be fairly simple.  
   
-\[code:c#\]  
+```csharp  
         public static void SetValueForKeyFrame(this Storyboard storyboard, string keyFrameName, double value)  
         {  
             foreach (var timeline in storyboard.Children)  
@@ -69,11 +69,11 @@ Lately I've been doing quite a bit of control development, both custom controls 
                 }  
             }             
         }  
-\[/code\]  
+```  
   
 **Convienience methods for changing states for a UserControl  
 **Instead of working directly with the VisualStateManager, I like to do "this.GoToState(...)" on my UserControls. Again, the below code is for user controls, but could just as easily be for a custom control. Combining all of the above and the code below will give you this convience.  
-\[code:c#\]  
+```csharp  
         public static void GoToState(this UserControl control, string stateName, EventHandler stateChanged)  
         {  
             GoToState(control, stateName, true, stateChanged);  
@@ -101,4 +101,4 @@ Lately I've been doing quite a bit of control development, both custom controls 
                 VisualStateManager.GoToState(control, name, useTransitions);  
             }  
         }  
-\[/code\]
+```

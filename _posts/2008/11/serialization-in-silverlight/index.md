@@ -11,7 +11,7 @@ Anyhow, the XmlSerializer one is familiar with from the desktop framework is not
   
 The result is that I made a couple of helper methods to do it all.  
   
-\[code:c#\]  
+```csharp  
         public string Serialize<T>(T data)  
         {  
             using (var memoryStream = new MemoryStream())  
@@ -36,11 +36,11 @@ The result is that I made a couple of helper methods to do it all.
                 return theObject;  
             }  
         }  
-\[/code\]   
+```   
   
 A sample with a couple of classes:  
   
-\[code:c#\]  
+```csharp  
     public class WorkPosition  
     {  
         public double PositionSize { get; set; }  
@@ -78,4 +78,4 @@ A sample with a couple of classes:
         }  
     }  
   
-\[/code\]
+```

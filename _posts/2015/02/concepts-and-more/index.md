@@ -17,35 +17,35 @@ With the philosophy of [CQRS](http://martinfowler.com/bliki/CQRS.html) at hear
 
 Let’s look at a scenario; say I want to update the address of a person. A command could be something like the following:
 
-\[code language="csharp"\] using System; using Bifrost.Commands;
+```csharp using System; using Bifrost.Commands;
 
-public class UpdateAddressForPerson : Command { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } \[/code\]
+public class UpdateAddressForPerson : Command { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } ```
 
 In Bifrost you’d then have a CommandHandler to deal with this and then an [AggregateRoot](http://martinfowler.com/bliki/DDD_Aggregate.html) that would probably look like the following:
 
-\[code language="csharp"\] using System; using Bifrost.Domain;
+```csharp using System; using Bifrost.Domain;
 
-public class Person : AggregateRoot { public Person(Guid personId) : base(personId) {} public UpdateAddress(string street, string city, string postalCode, string country) { // Apply an event } } \[/code\]
+public class Person : AggregateRoot { public Person(Guid personId) : base(personId) {} public UpdateAddress(string street, string city, string postalCode, string country) { // Apply an event } } ```
 
 The aggregate would then apply an event that looks like the following:
 
-\[code language="csharp"\] using System; using Bifrost.Events;
+```csharp using System; using Bifrost.Events;
 
-public class AddressUpdatedForPerson : Event { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } \[/code\]
+public class AddressUpdatedForPerson : Event { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } ```
 
 An event subscriber would pick this up and update a read model that might look like the following:
 
-\[code language="csharp"\] using System; using Bifrost.Read;
+```csharp using System; using Bifrost.Read;
 
-public class AddressForPerson : IReadModel { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } \[/code\]
+public class AddressForPerson : IReadModel { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } ```
 
 That was the artefacts we would typically be dealing with; command, aggregateroot, event and readmodel. For simplicity, these look pretty much the same - but they don’t have to, and in fact; most of the time they don’t. Lets address something here. We’re losing out on a potential in the modelling here. Take the Guid representing the unique identifier for the person. This is in fact something  that is part of the domain vocabulary that we’re losing by just making it a Guid directly.
 
 In Bifrost we have something called ConceptAs that we can use to represent this domain concept. This is a base class that we recognize throughout the system and deals with properly during serialisation between the different out of process places it might go.
 
-\[code language="csharp"\] using System; using Bifrost.Concepts;
+```csharp using System; using Bifrost.Concepts;
 
-public class Person : ConceptAs<Guid> { public static implicit operator Person(Guid personId) { return new Person() { Value = personId }; } } \[/code\]
+public class Person : ConceptAs<Guid> { public static implicit operator Person(Guid personId) { return new Person() { Value = personId }; } } ```
 
 What this does is to wrap up the primitive, giving us a type that represent the domain concept. One modelling technique we applied when doing this is to stop referring to it as an id, so we started calling it the noun in which it represented. For us, this actually became the abstract noun. It doesn’t hold any properties for what it represents, only the notion of it. But codewise, this looks very good and readable.
 
@@ -59,9 +59,9 @@ Our typical project structure:
 
 So, now that we have our first concept, what did it do? It replaced the Guid reference throughout, introducing some clarity in our models. But the benefit we stumbled upon with this; we now have something to do cross cutting concerns with. By having the type of pipelines we have in Bifrost, we can now start doing things based on the type being used in different artefacts. Take the command for instance, we can now introduce input validation or business rules for it that would be applied automatically whenever used. Our support for FluentValidation has a BusinessValidator type that can be used for this:
 
-\[code language="csharp"\] using Bifrost.FluentValidation; using FluentValidation;
+```csharp using Bifrost.FluentValidation; using FluentValidation;
 
-public class PersonBusinessValidator : BusinessValidator<Person> { public PersonBusinessValidator() { RuleFor(p => p.Value) .Must(… a method/lambda for checking if a person exist …) .WithMessage(“The person does not exist”); } } \[/code\]
+public class PersonBusinessValidator : BusinessValidator<Person> { public PersonBusinessValidator() { RuleFor(p => p.Value) .Must(… a method/lambda for checking if a person exist …) .WithMessage(“The person does not exist”); } } ```
 
 As long as you don’t create a specific business validator for the command, this would be automatically picked up. But if you were to create a specific validator for the command you could point it to this validator as a rule for the person property.
 
@@ -73,9 +73,9 @@ It opens up for other cross cutting concerns as well, security for instance.
 
 A second type of object, with the same importance in expressing the domain and opening for solving things in a cross cutting manner are [value objects](http://martinfowler.com/bliki/ValueObject.html). This is a type of object that actually holds information, attributes that have value. They are useless on their own, but often used in the domain and also on the read side. Their uniqueness is based on all the fields in it. We find these in any domain all the time, they are typical things like money, phone number or in our case address. These are just the off the top of my head type of value objects you’d have, but you’ll find these in many forms. Lets tackle address:
 
-\[code language="csharp"\] using System; using Bifrost.Concepts;
+```csharp using System; using Bifrost.Concepts;
 
-public class Address : Value { public string Street { get; set; } public string City { get; set; } public string Postal { get; set; } public string Country { get; set; } } \[/code\]
+public class Address : Value { public string Street { get; set; } public string City { get; set; } public string Postal { get; set; } public string Country { get; set; } } ```
 
  
 
@@ -85,31 +85,31 @@ With the value object you do get the same opportunities as with the concept for 
 
 If we summarize the sample before with these new building blocks, we would get:
 
-\[code language="csharp"\] using System; using Bifrost.Commands;
+```csharp using System; using Bifrost.Commands;
 
-public class UpdateAddressForPerson : Command { public Person Person { get; set; } public Address Address { get; set; } } \[/code\]
+public class UpdateAddressForPerson : Command { public Person Person { get; set; } public Address Address { get; set; } } ```
 
 Our event:
 
-\[code language="csharp"\] using System; using Bifrost.Events;
+```csharp using System; using Bifrost.Events;
 
-public class AddressUpdatedForPerson : Event { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } \[/code\]
+public class AddressUpdatedForPerson : Event { public Guid PersonId { get; set; } public string Street { get; set; } public string City { get; set; } public string PostalCode { get; set; } public string Country { get; set; } } ```
 
 As you can see, we keep it as it was, with the properties all in the event.
 
 Our AggregateRoot:
 
-\[code language="csharp"\] using System; using Bifrost.Domain;
+```csharp using System; using Bifrost.Domain;
 
 public class Person : AggregateRoot { public Person(Guid person) : base(person) {}
 
-public UpdateAddress(Address address) { Apply(new AddressUpdatedForPerson { Person = Id, Street = address.Street, City = address.City, Postal = address.Postal, Country = address.Country }); } } \[/code\]
+public UpdateAddress(Address address) { Apply(new AddressUpdatedForPerson { Person = Id, Street = address.Street, City = address.City, Postal = address.Postal, Country = address.Country }); } } ```
 
 The readmodel then would be:
 
-\[code language="csharp"\] using System; using Bifrost.Read;
+```csharp using System; using Bifrost.Read;
 
-public class AddressForPerson : IReadModel { public Person Person { get; set; } public Address Address { get; set; } } \[/code\]
+public class AddressForPerson : IReadModel { public Person Person { get; set; } public Address Address { get; set; } } ```
 
 # Conclusion
 

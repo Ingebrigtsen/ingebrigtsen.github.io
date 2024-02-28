@@ -14,7 +14,7 @@ Fortunately, the Assembly class in the Windows Phone 7 version of .net has an ov
 
 From the [TypeDiscoverer](http://balder.codeplex.com/SourceControl/changeset/view/6c6cb5db5ec4#Source%2fBalder.Core%2fExecution%2fTypeDiscoverer.cs) code in Balder :
 
-\[code:c#\]  
+```csharp  
 private void CollectTypes()  
 {  
 if( null != Deployment.Current )  
@@ -29,4 +29,4 @@ var types = assembly.GetTypes();
 }  
 }  
 }  
-\[/code\]
+```

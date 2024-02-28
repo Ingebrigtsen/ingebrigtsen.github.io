@@ -11,7 +11,7 @@ I've been on a short assignment with a client and they wanted to establish ways 
 
 In Angular, with the Angular Route extension, routing is one of the things you can do. A fairly simple and consistent API. One typically ends with a pattern as follows:
 
-\[code type="javascript"\] var application = angular.module("MyApp", \["", "ngRoute"\]); application.config(\["$routeProvider"\], function($routeProvider) { $routeProvider.when("/some/route", { templateUrl: "/some/path/to/view.html", controller: "MyController" }); }); application.controller("MyController", function() { /\* Put your controller code here ... \*/ }); \[/code\]
+\[code type="javascript"\] var application = angular.module("MyApp", \["", "ngRoute"\]); application.config(\["$routeProvider"\], function($routeProvider) { $routeProvider.when("/some/route", { templateUrl: "/some/path/to/view.html", controller: "MyController" }); }); application.controller("MyController", function() { /\* Put your controller code here ... \*/ }); ```
 
 On one side one tells what to do when a route occurs - pointing it to a view and a controller that represents it. Then we need to configure the controller by its name and then point it to a function that represents the controller. My claim is that looking at your app, you either have formalized a pattern or you have a pattern by accident for how these things are put together. This is a great time to formalize it by creating something that represents it and can automate it as a convention.
 

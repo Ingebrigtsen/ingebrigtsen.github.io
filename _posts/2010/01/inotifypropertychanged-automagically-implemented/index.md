@@ -20,18 +20,18 @@ I started earlier today with the idea I could generate the proxy from scratch my
 
 Using it is very simple, create a class:
 
-\[code:c#\]  
+```csharp  
 public class ViewModel  
 {      
     public virtual string SomeString { get; set; }    
 }   
-\[/code\] 
+``` 
 
 Getting the proxy type:
 
-\[code:c#\]  
+```csharp  
 var proxyType = NotifyingObjectWeaver.GetProxyType<ViewModel>();  
-\[/code\]
+```
 
 Once you have the type you can bind it in your IoC container or simply use the Activator type and create an instance of it. 
 

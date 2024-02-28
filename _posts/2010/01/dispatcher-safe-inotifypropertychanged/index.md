@@ -23,16 +23,16 @@ This has all been implemented into the Balder project, as I need it for my Sampl
 **What does it do?**  
 Lets say you have your object like below, the virtuals are in there for the weaver to be able to implement these properties in its proxy (as eplained in my previous [post](/post/2010/01/10/INotifyPropertyChanged-Automagically-implemented.aspx)). 
 
-\[code:c#\]  
+```csharp  
 public class Employee  
 {  
     public virtual string FirstName { get; set; }  
     public virtual string LastName { get; set; }   
 }  
-\[/code\]
+```
 
 The weaver will then go and inject its magic, the end result is pretty much like this:  
-\[code:c#\]  
+```csharp  
 public class EmployeeProxy : Employee, INotifyPropertyChanged  
 {  
     private IDispatcher \_dispatcher = DispatcherManager.Current;  
@@ -76,4 +76,4 @@ public class EmployeeProxy : Employee, INotifyPropertyChanged
     }  
   
 }  
-\[/code\]
+```

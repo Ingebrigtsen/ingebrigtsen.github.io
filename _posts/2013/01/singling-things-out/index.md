@@ -20,21 +20,21 @@ Say you have a system were you have Employees and each and every one of these ha
 
 The employee could be something like this :
 
-\[code language="csharp"\] public class Employee { public int Id { get; set; } public string FirstName { get; set; } public string LastName { get; set; } } \[/code\]
+```csharp public class Employee { public int Id { get; set; } public string FirstName { get; set; } public string LastName { get; set; } } ```
 
 A fairly simple class representing an [aggregate root](http://en.wikipedia.org/wiki/Domain-driven_design).
 
 Then go and add this other thing in our domain; a WorkPosition, a value type that refers to the aggregate:
 
-\[code language="csharp"\] public class WorkPosition { public int Id { get; set; } public int EmployeeId { get; set; } public double PositionSize { get; set; } } \[/code\]
+```csharp public class WorkPosition { public int Id { get; set; } public int EmployeeId { get; set; } public double PositionSize { get; set; } } ```
 
 One could argue these represent entities that you might want to get from a database and you might want to call them entities and DRY up your code, since they both have an Id:
 
-\[code language="csharp"\] public class Entity { public int Id { get; set; } }
+```csharp public class Entity { public int Id { get; set; } }
 
 public class Employee : Entity { public string FirstName { get; set; } public string LastName { get; set; } }
 
-public class WorkPosition : Entity { pubic int EmployeeId { get; set; } public double PositionSize { get; set; } } \[/code\]
+public class WorkPosition : Entity { pubic int EmployeeId { get; set; } public double PositionSize { get; set; } } ```
 
 Nice, now we've dried it all up and the Id **property** can be **reused**.
 
@@ -42,11 +42,11 @@ The Id property is a classic pattern, but in [domain driven design](http://en.w
 
 We want to introduce this, but we'd love to keep the Entity base class, so we can stick common things into it, things like auditing maybe. But now we are changing the type of what identifies an Employee, and it's not the same as for a WorkPosition; C# generics to the rescue:
 
-\[code language="csharp"\] public class Entity<T> { public T Id { get; set; } public DateTime ModifiedAt { get; set; } public string ModifiedBy { get; set; } }
+```csharp public class Entity<T> { public T Id { get; set; } public DateTime ModifiedAt { get; set; } public string ModifiedBy { get; set; } }
 
 public class Employee : Entity<string> { public string FirstName { get; set; } public string LastName { get; set; } }
 
-public class WorkPosition : Entity { public string EmployeeId { get; set; } public double PositionSize { get; set; } } \[/code\]
+public class WorkPosition : Entity { public string EmployeeId { get; set; } public double PositionSize { get; set; } } ```
 
 Great, now we have a generic approach to it and get auditing all in one go.
 
@@ -54,9 +54,9 @@ Great, now we have a generic approach to it and get auditing all in one go.
 
 We've just created a nightmare waiting to happen. We've made something generic, lost a lot from the domain already just to save typing in one property; Id (yeah I know, there are some auditing there - I'll get back to that soon). We've lost completely what the intent of the Employees identification really is, which was a social security number. At least the name of the property should reflect that; Id doesn't say anything about what kind of identification it is. A better solution would be going back to the original code and just make it a little bit more explicit:
 
-\[code language="csharp"\] public class Employee { public string SocialSecurityNumber { get; set; } public string FirstName { get; set; } public string LastName { get; set; } }
+```csharp public class Employee { public string SocialSecurityNumber { get; set; } public string FirstName { get; set; } public string LastName { get; set; } }
 
-public class WorkPosition { public int Id { get; set; } public string SocialSecurityNumber { get; set; } public double PositionSize { get; set; } } \[/code\]
+public class WorkPosition { public int Id { get; set; } public string SocialSecurityNumber { get; set; } public double PositionSize { get; set; } } ```
 
 That made it a lot more readable, we can see what is expected, and in fact we've also decoupled Employee and WorkPosition in one go - they weren't coupled directly before, but the property named EmployeeId made a logical coupling between the two - which we might not need.
 
@@ -68,9 +68,9 @@ Back to auditing - don't we want to have that? Sure. But let's think about that 
 
 Ok. So I have sinned, I've broken the [Single Responsibility Principle](http://en.wikipedia.org/wiki/Single_responsibility_principle) myself many times, and I will guarantee you that I will break it in the future as well. In fact, let me show you code I wrote that I came across in [Bifrost](http://github.com/dolittle/bifrost) a few weeks back that got the hairs on my back rising, a system called [EventStore](https://github.com/dolittle/Bifrost/blob/d70844e94ee441ed7c6e72975f3117f4b559a06f/Source/Bifrost/Events/EventStore.cs):
 
-\[code language="csharp"\] public class EventStore : IEventStore { public EventStore(IEventRepository eventRepository, IEventStoreChangeManager eventStoreChangeManager, IEventSubscriptionManager eventSubscriptionManager, ILocalizer localizer) { // Non vital code for this sample... }
+```csharp public class EventStore : IEventStore { public EventStore(IEventRepository eventRepository, IEventStoreChangeManager eventStoreChangeManager, IEventSubscriptionManager eventSubscriptionManager, ILocalizer localizer) { // Non vital code for this sample... }
 
-public void Save(UncommittedEventStream eventsToSave) { using(\_localizer.BeginScope()) { \_repository.Insert(eventsToSave); \_eventSubscriptionManager.Process(eventsToSave); \_eventStoreChangeManager.NotifyChanges(this, eventsToSave); } } } \[/code\]
+public void Save(UncommittedEventStream eventsToSave) { using(\_localizer.BeginScope()) { \_repository.Insert(eventsToSave); \_eventSubscriptionManager.Process(eventsToSave); \_eventStoreChangeManager.NotifyChanges(this, eventsToSave); } } } ```
 
 I've stripped away some parts that aren't vital for this post, but the original class some 60 lines. But looking at the little code above tells me a couple of things:
 

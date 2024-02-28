@@ -14,10 +14,10 @@ Then it struck me; "could it be... Naahh.. It couldn't,  lets try switching reg
 
 The simple solution, codewize, is to set the CurrentCulture to be Invariant:
 
-\[code:c#\]
+```csharp
 
 System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture; 
 
-\[/code\] 
+``` 
 
 I haven't had time to investigate why this happens, but it sure is kinda odd, since running the map in a browser works and the WPF Control is in fact just a WebBrowser control, using the same browser.

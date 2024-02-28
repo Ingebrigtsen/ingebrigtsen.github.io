@@ -16,7 +16,7 @@ In the interface you'll find one very important property you need to implement; 
 
 The schemes you return should only be the name of the scheme, without the "://" part of the URI. When you then want to assets into Balder, either in your Xaml or programatically, you just create the assetname as follows : "://". For instance, if you were to create a WCF loader :
 
-\[code:c#\]  
+```csharp  
 public class WcfFileLoader : Balder.Content.IFileLoader  
 {  
 public Stream GetStream(string fileName)  
@@ -28,6 +28,6 @@ public bool Exists(string fileName)
 // Do some more magical WCF calls and return wether or not the file exists  
 }  
 public string\[\] SupportedSchemes { get { return \[\] { "wcf" }; } }  
-\[/code\]
+```
 
 The filename would then be something like : "wcf://my3DModel.ase".
