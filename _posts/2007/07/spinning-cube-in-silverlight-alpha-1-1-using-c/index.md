@@ -60,7 +60,7 @@ private class Face
 
 Now we need to create the array of vertices for the object :
 
-```charp
+```csharp
 private Vertex[] _vertices = new Vertex[] {
                   new Vertex() { X=-150, Y=-150, Z=-150},
                   new Vertex() { X=150, Y=-150, Z=-150},
