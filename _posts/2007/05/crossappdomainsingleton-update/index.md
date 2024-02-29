@@ -30,4 +30,5 @@ In addition I've made it all threadsafe. So look at the attachment for this post
 
 On a second note; if you for instance expose an event in your singleton and any subscribers to that event exists in another AppDomain, you might want to keep in mind that you should probably inherit from MarshalByRefObject and override the IntializeLifeTimeService() method and return null there as well. Otherwize you might end up having a broken lease in the delegate added to the singleton.
 
-The updated C# file for this can be found [here](http://localhost:8080/wp-content/2014/10/crossappdomainsingleton_improved1.zip).
+The updated C# file for this can be found [here](files/crossappdomainsingleton_improved1.zip).
+
