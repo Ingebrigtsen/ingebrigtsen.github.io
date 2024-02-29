@@ -11,4 +11,4 @@ But, I gotta hand it to them, being an actor or actress is not just easy money. 
 
 Anyway..  I'd really like to thank Hallmark for giving me this opportunity. Hopefully they'll come knockin' again for me to star in a movie of their choice.. :)
 
-![](http://www.dolittle.com/photos/sample/images/89/original.aspx)
+![](images/star.jpeg)

@@ -3,7 +3,7 @@ title: "eXtreme Programming - Too extreme?"
 date: "2004-05-31"
 ---
 
-I'm gradually moving into being an eXtreme Programmer, takes a while to apply all practises, but I'm getting there..  One thing that kinda bugs me though; the lack of templates for existing applications / servers for helping me do what I do best : design and write code.
+I'm gradually moving into being an eXtreme Programmer, takes a while to apply all practices, but I'm getting there..  One thing that kinda bugs me though; the lack of templates for existing applications / servers for helping me do what I do best : design and write code.
 
 For one I've started using the XDE designer for .net (Rational). Really coooool tool. It comes with a lot of design patterns that are really nice. In addition it had a set of RUP features. Where did the XP features go??
 
