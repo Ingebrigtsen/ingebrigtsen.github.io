@@ -144,4 +144,4 @@ public class MySingleton : CrossAppDomainSingleton<MySingleton>
 }
 ```
 
-Look at the entire C# sample file from [here](/assets/posts/2007/05/crossappdomainsingleton1.zip)
+Look at the entire C# sample file from [here](files/crossappdomainsingleton1.zip)
