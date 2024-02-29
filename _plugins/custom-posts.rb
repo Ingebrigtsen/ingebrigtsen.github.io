@@ -21,10 +21,6 @@ module Jekyll
             post.content = post.content.gsub(/\(images\//, '({{ page.url | relative_url }}images/')
             post.content = post.content.gsub(/\(files\//, '({{ page.url | relative_url }}files/')
 
-            if post.data["title"] == "Cross AppDomain Singleton"
-                puts post.content
-            end
-
             site.collections['posts'].docs << post
           end         
     end
