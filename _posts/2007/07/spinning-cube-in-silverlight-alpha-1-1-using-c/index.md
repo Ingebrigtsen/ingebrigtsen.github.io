@@ -7,7 +7,7 @@ Silverlight represents a subset of WPF and it's features, one of the features th
 
 The sample is very basic and does not involve any heavy geometry math. If you want a sample using Matrix math and more advanced geomtry stuff, take a look at the Balder project : [http://www.codeplex.com/Balder](http://www.codeplex.com/Balder)
 
-**The main loop**
+## The main loop
 
 The first thing we need before we do anything else is a main loop. This can be achieved by using the animation system in Silverlight. By creating a storyboard and hook up the Completed event we can achieve a steady callback. In our Page.xaml we create our own Canvas for the spinning cube and add a storyboard inside it :
 
