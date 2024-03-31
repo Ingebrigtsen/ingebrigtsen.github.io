@@ -1,6 +1,6 @@
 ---
 title: "Introducing VSCode .NET Build Commands"
-date: "2022-02-21"
+date: "2024-03-31"
 categories: 
   - "net"
   - "csharp"
