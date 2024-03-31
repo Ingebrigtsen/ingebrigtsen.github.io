@@ -13,7 +13,7 @@ tags:
 
 ## TL;DR
 
-I've made a VSCode extension to make build tasks and launch configuration easier to maintain.
+I've made a VSCode extension to make .NET build tasks and launch configuration easier to maintain.
 You can find it [here](https://marketplace.visualstudio.com/items?itemName=einari.dotnet-build-commands).
 
 ## Why
