@@ -1,5 +1,5 @@
 ---
-title: "Introducing VSCode .NET Build Commands"
+title: "Introducing VSCode NET Build Commands"
 date: "2024-03-31"
 categories: 
   - "net"
