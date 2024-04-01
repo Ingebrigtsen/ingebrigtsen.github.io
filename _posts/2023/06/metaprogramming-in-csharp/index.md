@@ -23,6 +23,6 @@ This book is written based on personal experience.
 
 You can preorder it at [Amazon](https://www.amazon.com/Metaprogramming-Automate-your-development-simplify-ebook/dp/B0C53T3SQS/ref=sr_1_2?keywords=Metaprogramming+in+C%23&qid=1685613793&s=books&sr=1-2)
 
-🤎 Thanks for all the support given by the team at Packt while writing this book and helping it come to life. Also want to thank [Marius Iulian Mihailescu]() for the technical review.
+🤎 Thanks for all the support given by the team at Packt while writing this book and helping it come to life. Also want to thank [Marius Iulian Mihailescu](https://www.linkedin.com/in/mariusiulianmihailescu/) for the technical review.
 
 🤎🤎 A special thanks to my family for their patience as it took a lot of my spare-time to write this.
