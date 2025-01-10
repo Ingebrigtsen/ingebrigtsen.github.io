@@ -12,10 +12,10 @@ tags:
 
 Back in December 2015, I created an organization called [Cratis](https://github.com/cratis) on GitHub.
 At the time, I was trying to reboot the efforts put into a project called [Bifrost](https://github.com/einari/bifrost).
-The reboot was supposed to split up the original project into more focused parts.
+The goal of the reboot was to split up the original project into more focused parts.
 
 A couple of years later, we started a company called Dolittle and the combined work of
-Bifrost and what I had done for Cratis at the time became the foundation for the company.
+Bifrost and what I had managed to do with Cratis at the time, became the foundation for the company.
 
 I left Dolittle in late 2021 and shortly after started picking up Cratis again at my
 new employer. I was going back to reboot mode again, figuring out what worked and what
