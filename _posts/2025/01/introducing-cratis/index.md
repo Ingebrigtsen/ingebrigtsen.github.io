@@ -4,8 +4,10 @@ date: "2025-01-10"
 categories: 
   - "net"
   - "architecture"
+  - "cratis"
 tags: 
   - "c#"
+  - "event sourcing"
 ---
 
 ## A bit late...
