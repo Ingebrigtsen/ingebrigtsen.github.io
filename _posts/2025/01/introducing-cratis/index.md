@@ -10,7 +10,7 @@ tags:
 
 ## A bit late...
 
-Back in December 2015, I created an organization called **Cratis** on GitHub.
+Back in December 2015, I created an organization called [Cratis](https://github.com/cratis) on GitHub.
 At the time, I was trying to reboot the efforts put into a project called [Bifrost](https://github.com/einari/bifrost).
 The reboot was supposed to split up the original project into more focused parts.
 
