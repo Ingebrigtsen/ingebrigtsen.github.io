@@ -104,4 +104,4 @@ production for clients and employers, it is so far from early days.
 
 For our crown jewel; Chronicle, I'll leave with this:
 
-![](./images/hero.png)
+![](images/hero.png)
