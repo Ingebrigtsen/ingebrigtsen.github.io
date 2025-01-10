@@ -96,7 +96,7 @@ We've recently set up a [Discord server](https://discord.gg/kt4AMpV8WV) that you
 on GitHub in our discussions there or welcome any issues you might have with open arms and we'll respond as fast as we
 can.
 
-Everything is of course open-source and found at 8https://github.com/cratis](https://github.com/cratis).
+Everything is of course open-source and found at [https://github.com/cratis](https://github.com/cratis).
 
 ## Summary
 
