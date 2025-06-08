@@ -134,8 +134,7 @@ flowchart LR
 Unfortunately, our challenges didn't stop there.
 
 Turns out that with our code-first approach for the gRPC contracts and they becoming internalized, the
-default `ClientFactory` that comes with the code-first gRPC library was not able to actually create
-instances of the client implementations.
+default `ClientFactory` that comes with the code-first gRPC library will only create public client implementations, which would be in violation in the runtime. If the interface is `internal`, the implementation also has to be `internal`.
 
 We had to do two things; create the client implementations at build time and provide a custom client factory
 that knew how to find these implementations and use them if they were there.
