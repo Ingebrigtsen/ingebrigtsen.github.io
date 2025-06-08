@@ -11,7 +11,7 @@ tags:
   - "event sourcing"
 ---
 
-## Improving DevEx
+## Background
 
 We have the following core principles of how we approach developing any public facing APIs in Cratis:
 
