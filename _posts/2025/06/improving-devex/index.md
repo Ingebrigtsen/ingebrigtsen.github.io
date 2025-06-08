@@ -76,7 +76,7 @@ We have split out the different building blocks to be able to achieve this.
 
 With all our different client types we end up with a dependency graph that looks like this:
 
-```mermaid
+<pre class="mermaid">
 %%{ init: { "flowchart": { "curve": "basis" } } }%%
 flowchart TD
     XUnit.Integration --> XUnit
@@ -92,7 +92,7 @@ flowchart TD
     Embedded-Workbench --> Api
     Api --> Connections
     Api --> Contracts
-```
+</pre>
 
 ## The Remedy
 
@@ -126,10 +126,10 @@ public. If they are public, break the build.
 
 The following is the flow we came up with:
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     Build --> ILRepack --> AssemblyFixer --> InternalsVerifier
-```
+</pre>
 
 Unfortunately, our challenges didn't stop there.
 
@@ -143,10 +143,10 @@ that knew how to find these implementations and use them if they were there.
 For the foundational .NET Client, which most other clients then relies on, had to have the following
 flow.
 
-```mermaid
+<pre class="mermaid">
 flowchart LR
     GrpcClients --> Build --> ILRepack --> AssemblyFixer --> InternalsVerifier
-```
+</pre>
 
 ## Conclusion
 
