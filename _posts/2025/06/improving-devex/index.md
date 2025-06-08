@@ -18,7 +18,7 @@ We have the following core principles of how we approach developing any public f
 - APIs should be lovable
 - Provide sane defaults but make them flexible, extensible and overridable
 - Consistency is king
-- It should be easy to things right, hard to do things wrong
+- It should be easy to do things right, hard to do things wrong
 - Never expose more than is needed
 
 With the [Chronicle](https://github.com/cratis/chronicle) project we've had a couple of challenges where
