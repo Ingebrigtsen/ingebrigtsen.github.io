@@ -37,7 +37,7 @@ When doing that we introduce a couple of issues;
 - Constructs with the same name show up in multiple namespaces and developers can pick the wrong type
 
 By exposing more than we need, we basically create a larger API surface that brings with it confusion
-to consumers, but also potential more work for us to maintain if people start relying on it.
+to consumers, and also potentially more work for us to maintain if people start relying on it.
 
 The second thing is the confusion of development tools automatically showing up with code suggestions
 and you as a developer not knowing what to pick and you get the frustration of compile time errors.
@@ -99,7 +99,7 @@ flowchart TD
 Back to solving it properly. We tried out a bunch of different solutions but ended up using
 [ILRepack](https://github.com/gluck/il-repack) with the [ILRepack.Lib.MSBuild.Task](https://github.com/ravibpatel/ILRepack.Lib.MSBuild.Task) on top.
 
-It provided the flexibility we needed for this to work. However, it didn't provide is with all the magic
+It provided the flexibility we needed for this to work. However, it didn't provide us with all the magic
 we needed.
 
 Our InProcess client packages needs the **Kernel** to work. The internal **Kernel** APIs are not something
