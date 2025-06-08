@@ -1,5 +1,5 @@
 ---
-title: "Introducing Cratis"
+title: "Improving DevEx"
 date: "2025-06-08"
 categories: 
   - "net"
