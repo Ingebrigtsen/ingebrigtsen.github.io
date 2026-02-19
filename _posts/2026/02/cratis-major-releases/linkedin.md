@@ -5,11 +5,13 @@ We've been too busy building the future of event sourcing to properly announce t
 Here's what's new:
 
 ✨ **Unified Read Model API** - one consistent way to work with projections and reducers
-🔐 **Full TLS Support** - production-ready security out of the box
+🔐 **TLS by Default** - production-ready security out of the box
+🔒 **Built-in Authentication** - required auth for production clients and Workbench with built-in authority
 ⚡ **Performance Boost** - bulk writes and smart throttling for serious scalability
 🛠️ **Workbench Time Machine** - debug your read models by stepping through time
 🤖 **AI Integration** - bringing event sourcing to your AI assistant with MCP servers
 📊 **Static Code Analysis** - catch issues at compile time across Chronicle and Arc
+📚 **Revamped Documentation** - consistent, approachable, and comprehensive at cratis.io
 
 But here's what I'm most excited about: our commitment to making event sourcing accessible through **exceptional tooling**. 
 
