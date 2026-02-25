@@ -33,6 +33,10 @@ This unification eliminates the confusion of working with different APIs for sim
 
 Security takes center stage with **full TLS support** for the Kernel. TLS is now enabled by default for both development and production environments, with explicit configuration required when running in production. This gives you the flexibility to disable it if needed while ensuring secure-by-default behavior.
 
+Beyond TLS, Chronicle now **requires authenticated clients in production**, ensuring only authorized applications can connect to your event store. The **Workbench also requires authenticated users**, protecting your development and debugging tools from unauthorized access.
+
+We've have our own authority into Chronicle, but you're not locked in - the system supports integration with external identity providers and authorities as well. All server configuration options, including authentication setup, are detailed in the [Chronicle hosting configuration documentation](https://www.cratis.io/docs/Chronicle/hosting/configuration/index.html).
+
 ### Performance & Scalability Enhancements
 
 We've made substantial improvements to performance and resource management:
@@ -45,10 +49,17 @@ We've made substantial improvements to performance and resource management:
 
 The developer experience has been enhanced in several ways:
 
-- **Static code analysis and code fixes** integrated into the .NET client, helping you catch issues at compile time
+- **Static code analysis and code fixes** integrated into both [Chronicle](https://www.cratis.io/docs/Chronicle/code-analysis/index.html) and [Arc](https://www.cratis.io/docs/Arc/backend/code-analysis/index.html) ([Arc + Chronicle](https://www.cratis.io/docs/Arc/backend/chronicle/code-analysis/index.html)), helping you catch issues at compile time and follow best practices
+- **Comprehensive documentation** that's been completely revamped to be more consistent and approachable - all available at [cratis.io](https://cratis.io)
 - **Webhook-based observers** allowing arbitrary webhook endpoints to receive events
 - **Consistent tagging system** for artifacts like Reducers, Projections, ReadModels, Reactions, EventTypes, and appended events
 - Strongly typed event content - the `Content` property on `AppendedEvent` is now the actual deserialized type instead of `ExpandoObject`
+
+### Workbench Enhancements
+
+We've invested heavily in the **Chronicle Workbench** to provide the tooling necessary for a great developer experience. The standout feature is the **Time Machine** for debugging read models - allowing you to step through the evolution of your read models and understand exactly how they were built from your event stream. This isn't just a UI feature either; the Time Machine functionality is exposed through a public API in the client, so you can leverage it for your own debugging and testing needs.
+
+![Time Machine](./time-machine.gif)
 
 ### Strategic Removals
 
@@ -64,35 +75,35 @@ These removals aren't about losing functionality - they're about doing things be
 
 [Arc v19.0.0](https://github.com/Cratis/Arc/releases/tag/v19.0.0) brings version alignment with Chronicle v15.0.0, ensuring you have compatible versions across your Cratis stack. The release also fixes an important issue with the proxy generator handling duplicate type names from different namespaces - now treated as a proper error rather than silently overwriting files.
 
+Like Chronicle, Arc also benefits from [static code analysis support](https://www.cratis.io/docs/Arc/backend/code-analysis/index.html) to help you write better code and catch issues early.
+
 ## What's Next?
 
-Looking at our active development, several exciting capabilities are in the works:
+Our roadmap is laser-focused on one thing: **making event sourcing accessible through exceptional tooling and developer experience**. We firmly believe that great tooling is the key success factor for widespread adoption of event sourcing. It's not enough to have a powerful platform - developers need tools that make them productive, confident, and even joyful in their work.
 
-### Seed Data & Testing Support
+### Workbench Evolution
 
-We're working on a comprehensive **seed data specification system** that will make it easier to set up test data and bootstrap environments. This will be invaluable for development, testing, and demo scenarios.
+We're continuing to invest heavily in the **Chronicle Workbench**, building features that simplify complex scenarios and provide visibility into your event-sourced systems. From the Time Machine for debugging to visualization tools for understanding your event streams, we're committed to making the Workbench an indispensable part of your development workflow.
 
-### Contract Validation & Compatibility
+### AI-Powered Development
 
-Two major initiatives around API contracts are underway:
+We're embracing the AI revolution by building **MCP (Model Context Protocol) servers** that bring Chronicle and modern development patterns directly into your AI-assisted workflows:
 
-- **gRPC API surface validation** to catch breaking changes before they reach production
-- **Client-server contract compatibility validation** that ensures clients and servers can safely communicate, preventing runtime failures due to version mismatches
+- [Chronicle MCP Server](https://github.com/Cratis/Chronicle.Mcp) - bringing Chronicle concepts and patterns to your AI assistant
+- [Vertical Slices MCP Server](https://github.com/Cratis/VerticalSlices) - helping you build better architectures with AI guidance
 
-### Compensation & Saga Support
+These integrations allow AI assistants to understand your event-sourced architecture and provide context-aware suggestions, making it easier than ever to build and maintain complex systems.
 
-**Event compensation support** is being developed to enable sophisticated saga patterns and complex business process management. This will allow you to define compensating actions for events, making it easier to handle long-running transactions and business processes that span multiple bounded contexts.
+### Continuous Simplification
 
-### Artifact Activation System
-
-An **automatic dependency injection system for artifacts** is in development, further simplifying how you wire up and activate your projections, reducers, reactions, and other Chronicle artifacts. This will reduce boilerplate and make your applications more maintainable.
+Every feature we build, every API we design, goes through the lens of developer experience. We're not just adding capabilities - we're continuously simplifying, streamlining, and removing friction. Because at the end of the day, the best tools are the ones that get out of your way and let you focus on solving business problems.
 
 ## Embracing the Future
 
-These releases represent not just incremental improvements, but a strategic evolution of how we think about event sourcing and CQRS in modern .NET applications. By moving responsibilities to the right places, removing unnecessary abstractions, and focusing on developer experience, we're building a platform that's both powerful and pleasant to use.
+These releases represent not just incremental improvements, but a strategic evolution of how we think about event sourcing and CQRS in modern .NET applications. By moving responsibilities to the right places, removing unnecessary abstractions, and focusing relentlessly on developer experience, we're building a platform that's both powerful and pleasant to use.
 
-The upcoming features around contract validation, compensation support, and seed data management show our commitment to making Chronicle production-ready for the most demanding enterprise scenarios while maintaining the developer-friendly approach that makes it great to work with.
+Our commitment to exceptional tooling - from static code analysis to the Workbench to AI integration - reflects our belief that event sourcing deserves the same world-class developer experience as any other architectural pattern. Better yet, it should be easier and more enjoyable than traditional approaches.
 
-If you're using Chronicle and Arc, I encourage you to upgrade and experience these improvements firsthand. As always, check the [release notes](https://github.com/Cratis/Chronicle/releases/tag/v15.0.0) for detailed migration guidance.
+If you're using Chronicle and Arc, I encourage you to upgrade and experience these improvements firsthand. As always, check the [release notes](https://github.com/Cratis/Chronicle/releases/tag/v15.0.0) for more details.
 
 Ready to build better event-sourced systems? Start exploring Chronicle v15.0.0 today!
