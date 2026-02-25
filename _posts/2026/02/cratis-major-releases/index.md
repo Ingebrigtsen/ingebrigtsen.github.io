@@ -59,7 +59,7 @@ The developer experience has been enhanced in several ways:
 
 We've invested heavily in the **Chronicle Workbench** to provide the tooling necessary for a great developer experience. The standout feature is the **Time Machine** for debugging read models - allowing you to step through the evolution of your read models and understand exactly how they were built from your event stream. This isn't just a UI feature either; the Time Machine functionality is exposed through a public API in the client, so you can leverage it for your own debugging and testing needs.
 
-![Time Machine](./images/time-machine.gif)
+![Time Machine](images/time-machine.gif)
 
 ### Strategic Removals
 
