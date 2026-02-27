@@ -36,6 +36,24 @@ That's it. Command comes in, event gets recorded, read model gets updated. Every
 
 ---
 
+## The Four Patterns
+
+Three building blocks. Four ways to combine them. That's the whole vocabulary.
+
+![The four Event Modeling patterns: State Change, State View, Automation and Translator](patterns.png)
+
+**State Change** is the most common pattern — a user submits a command, it gets validated, and an event is recorded. `CheckIn` happens, `CheckinCompleted` is stored. The intent is explicit, the outcome is captured.
+
+**State View** is the read side — events are projected into a read model that the UI displays. The `Visitor` read model gets built from `RoomAssigned` and `CheckinCompleted` events. It's always up to date, and you can rebuild it from scratch at any point just by replaying the events.
+
+**Automation** is what happens behind the scenes — a processor watches a read model (think: a to-do list), picks up items, and fires a command to handle each one. Sending a confirmation email after check-in. Triggering a payment. Scheduling a cleaning slot. No human involved, same building blocks.
+
+**Translator** handles integration — when an external system feeds your system events you don't own, you translate them into your own language. You don't want GPS coordinates as domain events. You want `GuestLeftHotel` and `GuestReturnedToRoom` — events that mean something in your context.
+
+That's it. Any workflow in any system, no matter how complex, is some combination of those four patterns. Once you recognise them, you'll see them everywhere.
+
+---
+
 ## It starts with a brainstorm
 
 Before you get to a clean model, you start messy. And that's the point.
