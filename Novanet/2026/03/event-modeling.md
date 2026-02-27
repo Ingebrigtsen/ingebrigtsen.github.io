@@ -30,22 +30,7 @@ The whole model revolves around three concepts:
 
 Put them together and you've got a complete picture of any workflow:
 
-```mermaid
-flowchart LR
-    UI([User Interface])
-    CMD[Command]
-    EVT([Event])
-    RM[Read Model]
-
-    UI -->|user action| CMD
-    CMD -->|if valid| EVT
-    EVT -->|projected into| RM
-    RM -->|displayed in| UI
-
-    style CMD fill:#4A90D9,color:#fff,stroke:#2c6fad
-    style EVT fill:#E8965A,color:#fff,stroke:#c07030
-    style RM fill:#6ABF8A,color:#fff,stroke:#3d8a5c
-```
+![Process](./process.png)
 
 That's it. Command comes in, event gets recorded, read model gets updated. Every workflow in your system follows this same loop.
 
@@ -101,7 +86,7 @@ That shared language is genuinely valuable. I wrote about this in my article on 
 
 An Event Modeling session isn't a long waterfall exercise. The typical format is a focused workshop — often a day or two — where the whole team participates. You go through 7 steps:
 
-![Process](./process.png)
+![Process](./steps.png)
 
 By the end, you have a blueprint that covers *every field, every state change, every integration*. You can trace any piece of data from the moment a user types it into a form, through every event it triggers, all the way to where it ends up on a screen somewhere else. That rigour is what makes the model so useful.
 
