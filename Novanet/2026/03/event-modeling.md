@@ -53,28 +53,17 @@ That's it. Command comes in, event gets recorded, read model gets updated. Every
 
 ## A concrete example
 
-Let's take a simple hotel booking system. Over time, the events on the timeline might look like this:
+Here's a real event model — a visitor and room operations system:
 
-```mermaid
-timeline
-    title Hotel Booking - System Events Over Time
-    section Guest
-        RoomSearched : Guest browses availability
-        RoomSelected : Guest picks a room and dates
-        BookingCreated : Guest confirms the booking
-    section Payment
-        PaymentInitiated : Guest submits card details
-        PaymentApproved : Payment processor confirms
-    section Hotel Operations
-        RoomAssigned : Room assigned to booking
-        CheckInCompleted : Guest arrives and checks in
-        CheckOutCompleted : Guest leaves
-        RoomCleaningScheduled : Housekeeping notified
-```
+![Event model showing room assignment, visitor check-in, check-out and cleaning schedule slices](event-model.png)
 
-Notice how the model tells a story. From the first interaction all the way through to the end. Anyone can follow it. You don't need a computer science degree to understand what's happening here.
+Reading it left to right, the system tells a story through five workflow slices:
 
-And here's the thing — when a developer sees `BookingCreated`, they know exactly what to build. When a product owner sees `RoomCleaningScheduled`, they can immediately ask: "Should we notify the housekeeper by SMS or only in the app?" The model surfaces those conversations *before* they cost you three sprints to fix.
+Each vertical slice is independent. `AssignRoom` fires and `RoomAssigned` is recorded. `CheckIn` fires and `CheckinCompleted` is recorded. The `Visitor` read model is then *projected* from those events — it doesn't care how the data got there, it just reads the event stream and builds a view the front end can display.
+
+Notice what this means in practice. A developer picking up the "Check In" slice knows exactly what they're building: handle the `CheckIn` command, validate it, record a `CheckinCompleted` event. Done. They don't need to understand the whole system. A product owner looking at the same model can ask: "What information do we need to show on the Visitor list?" — and point straight at the `Visitor` read model to have that conversation. An operations manager can trace what triggers a cleaning schedule without reading a single line of code.
+
+That's the point. Everyone is looking at the same thing, and everyone understands it.
 
 ---
 
@@ -137,7 +126,7 @@ Event Modeling and Event Sourcing are not the same thing — but they're natural
 
 Event Modeling is a *design* technique. It works for any system, including traditional CRUD-style architectures. You don't need event sourcing to use it.
 
-That said, if your system is built on event sourcing — where the events themselves are the source of truth — then the model and the implementation speak the same language from day one. The `RoomBooked` event in your model *is* the event your code produces and stores. No translation layer. No impedance mismatch.
+That said, if your system is built on event sourcing — where the events themselves are the source of truth — then the model and the implementation speak the same language from day one. The `CheckinCompleted` event in your model *is* the event your code produces and stores. No translation layer. No impedance mismatch.
 
 If you want to understand event sourcing more, I'd recommend [Martin Dilger's book](https://leanpub.com/eventmodeling-and-eventsourcing) — he covers both techniques and how they reinforce each other. I wrote separately about [event sourcing and why it matters](https://novanet.no/stop-losing-information-event-sourcing/) — the short version: stop throwing information away.
 
