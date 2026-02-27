@@ -51,9 +51,27 @@ That's it. Command comes in, event gets recorded, read model gets updated. Every
 
 ---
 
+## It starts with a brainstorm
+
+Before you get to a clean model, you start messy. And that's the point.
+
+The first step of an Event Modeling session is brainstorming — everyone in the room, regardless of role, dumps every event they can think of onto the canvas. No structure yet. No judgment. Just: "what happens in this system?" Developers think about state changes. Domain experts think about business processes. Product owners think about user journeys. All of it goes up.
+
+![Brainstorming session canvas with scattered event sticky notes across Guest and Hotel Operations swim lanes](brainstorming.png)
+
+Look at that — it's deliberately unpolished. Events scattered across swim lanes, people questioning whether they've got it right ("Is all of this right?"), duplicates, gaps. That's normal. The value isn't in the tidiness; it's in surfacing everything that different people in the room carry in their heads. Things that are obvious to the domain expert but completely invisible to the developer. Things the developer anticipated but the product owner hadn't thought through.
+
+This is where alignment actually happens. Not in a requirements document written in isolation, but in the room, together, with everyone pointing at the same canvas.
+
+Once the events are out in the open, you start arranging them. You put them in a plausible order. You ask: does this story make sense? Can we walk through it from start to finish? That process reveals the gaps — missing events, ambiguous naming, assumptions that only one person in the room was carrying.
+
+From that refined timeline, the full event model takes shape.
+
+---
+
 ## A concrete example
 
-Here's a real event model — a visitor and room operations system:
+Here's a real event model — a visitor and room operations system built from exactly that kind of brainstorm:
 
 ![Event model showing room assignment, visitor check-in, check-out and cleaning schedule slices](event-model.png)
 
@@ -83,26 +101,7 @@ That shared language is genuinely valuable. I wrote about this in my article on 
 
 An Event Modeling session isn't a long waterfall exercise. The typical format is a focused workshop — often a day or two — where the whole team participates. You go through 7 steps:
 
-```mermaid
-flowchart TD
-    S1["1. Brainstorm Events\nEveryone drops events on a timeline.\nNo judgment — just capture."]
-    S2["2. The Plot\nArrange events into a plausible story.\nDoes the order make sense?"]
-    S3["3. The Storyboard\nAdd wireframes or UI mockups.\nVisualise what users see."]
-    S4["4. Identify Inputs\nAdd commands — the actions that cause events."]
-    S5["5. Identify Outputs\nAdd read models — what the system shows back."]
-    S6["6. Apply Conway's Law\nOrganise into bounded contexts and swimlanes.\nWho owns what?"]
-    S7["7. Elaborate Scenarios\nWrite Given-When-Then specs for each workflow step."]
-
-    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7
-
-    style S1 fill:#E8965A,color:#fff,stroke:#c07030
-    style S2 fill:#E8965A,color:#fff,stroke:#c07030
-    style S3 fill:#7B9DD1,color:#fff,stroke:#4a6fa8
-    style S4 fill:#4A90D9,color:#fff,stroke:#2c6fad
-    style S5 fill:#6ABF8A,color:#fff,stroke:#3d8a5c
-    style S6 fill:#9B7FD4,color:#fff,stroke:#6a54a8
-    style S7 fill:#D4A76A,color:#fff,stroke:#a87840
-```
+![Process](./process.png)
 
 By the end, you have a blueprint that covers *every field, every state change, every integration*. You can trace any piece of data from the moment a user types it into a form, through every event it triggers, all the way to where it ends up on a screen somewhere else. That rigour is what makes the model so useful.
 
