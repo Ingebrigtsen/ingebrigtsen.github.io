@@ -253,6 +253,46 @@ Reflect on the journey, summarize key points, or acknowledge uncertainty.
 ✅ **This (explains the journey):**
 "We tried out a bunch of different solutions but ended up using ILRepack with the ILRepack.Lib.MSBuild.Task on top. It provided the flexibility we needed for this to work. However, it didn't provide us with all the magic we needed."
 
+## Professional "Company" Blog Articles
+
+When writing for a company blog vs. a personal blog, the voice stays the same but the style is slightly more polished and persuasive. Key differences:
+
+### Structure for a Persuasive/Educational Piece
+
+- Open with the **problem** — what goes wrong without this, why it matters
+- Lead with the "why", then "what", then "how"
+- Use a clear narrative arc: problem → insight → solution → benefits → challenges → when to use → call to action
+- End with a **direct call to action** (e.g. "Reach out to us")
+
+### Analogies and Real-World Comparisons
+
+- Ground abstract concepts in everyday analogies: house foundations, icebergs, ledger books
+- Use comparisons to physical trades (construction, engineering, carpentry) to make software feel tangible
+- Examples from the TCO article: "If you buy a house and everything looks good on the surface, but then discover during renovations that the foundation is weak..."
+
+### Citing Authority
+
+- Reference respected thought leaders to support a point, not to name-drop
+- Quotes are short and deployed sparingly: let them land, then move on
+- Examples seen in Novanet articles: Simon Sinek, Eric Evans, Voltaire, Steve Jobs
+- Cite data and reports to back up claims (Standish Group, CodeScene, etc.)
+
+### Tone Adjustments for Company Blog
+
+- Still personal and honest, but less self-deprecating than personal posts
+- Speak from experience ("I've seen it over and over") but represent the company ("We at Novanet can help...")
+- Accessible to non-developers — business stakeholders should follow along
+- Strong, confident opinions — but never dismissive of alternatives
+
+### Selling an Idea Without Being Salesy
+
+- Focus on the reader's pain, not the solution's features
+- Let benefits emerge from concrete examples rather than bullet-point claims
+- Acknowledge trade-offs and when something is *not* the right fit — this builds trust
+- The closing call to action should feel like a natural next step, not a hard sell
+
+---
+
 ## Summary
 
 Write like a thoughtful, experienced developer sharing hard-won wisdom with peers. Be honest about challenges, generous with context, and always focus on helping other developers succeed. Let personality shine through while maintaining technical credibility.
