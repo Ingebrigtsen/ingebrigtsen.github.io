@@ -1,0 +1,178 @@
+# Stop guessing. Start modeling.
+
+Most software projects don't fail because of bad code. They fail because the team built the wrong thing. Or built the right thing — but nobody agrees on what it actually does.
+
+I've seen it over and over. A product owner, a developer, and a domain expert sit in a meeting. They all walk out believing they understood each other. Three weeks later, when the code shows up, reality proves otherwise. That's expensive. And it's avoidable.
+
+That's where [Event Modeling](https://eventmodeling.org) comes in.
+
+---
+
+## What is Event Modeling?
+
+Event Modeling is a way to design and describe information systems using a shared timeline. It was developed by [Adam Dymitruk](https://www.linkedin.com/in/eventmodeling/) at Adaptech Group, and it's built on a simple but powerful idea: instead of describing what your system *is*, you describe what it *does* — as a story that unfolds over time.
+
+You can think of it as a blueprint for your entire system. But unlike a traditional specification document that nobody reads, an event model is visual, collaborative, and alive. Everyone on the team — developers, domain experts, product owners, designers — can look at it and understand what's going on.
+
+The best part? It only uses **3 building blocks** and **4 patterns**. You can explain the core concept in minutes. The rest you learn by doing.
+
+---
+
+## The Three Building Blocks
+
+The whole model revolves around three concepts:
+
+**Events** are facts. Things that happened. `RoomBooked`, `PaymentProcessed`, `OrderShipped`. These are immutable state changes stored on a timeline — the backbone of the model.
+
+**Commands** are intentions. The thing a user (or system) is trying to do that will *cause* an event. `BookRoom`, `ProcessPayment`, `ShipOrder`. They represent the inputs.
+
+**Read Models** (or Views) are the outputs — how the system informs the user about what's going on. The available room calendar. The order status page. The shipping dashboard.
+
+Put them together and you've got a complete picture of any workflow:
+
+```mermaid
+flowchart LR
+    UI([User Interface])
+    CMD[Command]
+    EVT([Event])
+    RM[Read Model]
+
+    UI -->|user action| CMD
+    CMD -->|if valid| EVT
+    EVT -->|projected into| RM
+    RM -->|displayed in| UI
+
+    style CMD fill:#4A90D9,color:#fff,stroke:#2c6fad
+    style EVT fill:#E8965A,color:#fff,stroke:#c07030
+    style RM fill:#6ABF8A,color:#fff,stroke:#3d8a5c
+```
+
+That's it. Command comes in, event gets recorded, read model gets updated. Every workflow in your system follows this same loop.
+
+---
+
+## A concrete example
+
+Let's take a simple hotel booking system. Over time, the events on the timeline might look like this:
+
+```mermaid
+timeline
+    title Hotel Booking - System Events Over Time
+    section Guest
+        RoomSearched : Guest browses availability
+        RoomSelected : Guest picks a room and dates
+        BookingCreated : Guest confirms the booking
+    section Payment
+        PaymentInitiated : Guest submits card details
+        PaymentApproved : Payment processor confirms
+    section Hotel Operations
+        RoomAssigned : Room assigned to booking
+        CheckInCompleted : Guest arrives and checks in
+        CheckOutCompleted : Guest leaves
+        RoomCleaningScheduled : Housekeeping notified
+```
+
+Notice how the model tells a story. From the first interaction all the way through to the end. Anyone can follow it. You don't need a computer science degree to understand what's happening here.
+
+And here's the thing — when a developer sees `BookingCreated`, they know exactly what to build. When a product owner sees `RoomCleaningScheduled`, they can immediately ask: "Should we notify the housekeeper by SMS or only in the app?" The model surfaces those conversations *before* they cost you three sprints to fix.
+
+---
+
+## It's not just for developers
+
+This is what makes Event Modeling different from most technical design approaches. It's built for everyone in the room.
+
+Traditional methods — UML diagrams, entity-relationship models, architecture docs — tend to be written *by* developers *for* developers. Domain experts tune out. Product owners nod politely and go back to Confluence. The gap between business intent and technical implementation grows wider.
+
+Event Modeling flips this. The language of the model is the language of the business. You're not talking about tables, classes, or API endpoints. You're talking about what happened, who did it, and what it made possible.
+
+That shared language is genuinely valuable. I wrote about this in my article on [Total Cost of Ownership](https://novanet.no/total-cost-of-ownership-software/) — the root cause of most expensive software problems is misalignment. Event Modeling is one of the most effective tools I've seen for addressing that directly.
+
+---
+
+## The workshop: 7 steps to a complete blueprint
+
+An Event Modeling session isn't a long waterfall exercise. The typical format is a focused workshop — often a day or two — where the whole team participates. You go through 7 steps:
+
+```mermaid
+flowchart TD
+    S1["1. Brainstorm Events\nEveryone drops events on a timeline.\nNo judgment — just capture."]
+    S2["2. The Plot\nArrange events into a plausible story.\nDoes the order make sense?"]
+    S3["3. The Storyboard\nAdd wireframes or UI mockups.\nVisualise what users see."]
+    S4["4. Identify Inputs\nAdd commands — the actions that cause events."]
+    S5["5. Identify Outputs\nAdd read models — what the system shows back."]
+    S6["6. Apply Conway's Law\nOrganise into bounded contexts and swimlanes.\nWho owns what?"]
+    S7["7. Elaborate Scenarios\nWrite Given-When-Then specs for each workflow step."]
+
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7
+
+    style S1 fill:#E8965A,color:#fff,stroke:#c07030
+    style S2 fill:#E8965A,color:#fff,stroke:#c07030
+    style S3 fill:#7B9DD1,color:#fff,stroke:#4a6fa8
+    style S4 fill:#4A90D9,color:#fff,stroke:#2c6fad
+    style S5 fill:#6ABF8A,color:#fff,stroke:#3d8a5c
+    style S6 fill:#9B7FD4,color:#fff,stroke:#6a54a8
+    style S7 fill:#D4A76A,color:#fff,stroke:#a87840
+```
+
+By the end, you have a blueprint that covers *every field, every state change, every integration*. You can trace any piece of data from the moment a user types it into a form, through every event it triggers, all the way to where it ends up on a screen somewhere else. That rigour is what makes the model so useful.
+
+---
+
+## The flat cost curve
+
+Here's something that should matter to anyone making investment decisions in software.
+
+The biggest hidden cost in traditional development is rework. Every new feature you add has a chance of touching existing code. The further along a project is, the more expensive that becomes — because there's more existing work to understand, to risk breaking, to re-test.
+
+Event Modeling changes this. Because each workflow step is defined by its contract — the shape of the command going in and the event coming out — you can build them in relative isolation. Done right, the cost of each new workflow step stays roughly constant, regardless of how much has already been built.
+
+That's not a trivial statement. It means estimates become reliable. Priorities can shift without blowing the budget. Fixed-price engagements become realistic. You go from "it depends" to "here's what that costs".
+
+---
+
+## The relationship to Event Sourcing
+
+Event Modeling and Event Sourcing are not the same thing — but they're natural companions.
+
+Event Modeling is a *design* technique. It works for any system, including traditional CRUD-style architectures. You don't need event sourcing to use it.
+
+That said, if your system is built on event sourcing — where the events themselves are the source of truth — then the model and the implementation speak the same language from day one. The `RoomBooked` event in your model *is* the event your code produces and stores. No translation layer. No impedance mismatch.
+
+If you want to understand event sourcing more, I'd recommend [Martin Dilger's book](https://leanpub.com/eventmodeling-and-eventsourcing) — he covers both techniques and how they reinforce each other. I wrote separately about [event sourcing and why it matters](https://novanet.no/stop-losing-information-event-sourcing/) — the short version: stop throwing information away.
+
+---
+
+## Tools that make it practical
+
+You can absolutely do Event Modeling with sticky notes on a wall or on a shared whiteboard tool. For remote teams and more complex systems, dedicated tooling helps.
+
+We're building [Cratis Studio](https://cratis.studio) specifically for this. It supports the full Event Modeling workflow — brainstorming, layout, team collaboration in real time, read model projections, and code generation for C# commands, events, and projections. The goal is to keep the model and the codebase in sync, rather than having the model become a historical artefact on a Confluence page nobody visits.
+
+It's built on top of [Cratis Chronicle](https://cratis.io), an open-source event sourcing platform for .NET — so if you're going all in on the event sourcing side as well, the stack is coherent from design to deployment.
+
+---
+
+## When should you consider this?
+
+Honestly? I'd argue for any system where multiple people need to understand how it works. That covers a lot of ground.
+
+Concretely, it's most valuable when:
+
+- You're building something non-trivial with meaningful business processes
+- You have domain experts who need to stay involved
+- You want to reduce the cost of getting requirements wrong
+- You're working with distributed teams where alignment is harder
+- You need traceability and auditability built in from the start
+
+If you're building a static brochure site, probably unnecessary. But if you're building something critical to how a business operates? Start here.
+
+---
+
+## Final thoughts
+
+Software is a collaborative effort. The best systems I've worked on were ones where the whole team — not just the developers — understood what was being built and why. Event Modeling is the best tool I've found for making that happen in a practical, structured way.
+
+It's not magic. It takes facilitation, discipline, and a willingness to be explicit about things teams often leave implicit. But once you've done a session and watched a product owner and a developer finish each other's sentences using the same vocabulary — you'll wonder how you worked any other way.
+
+[Reach out to us at Novanet](https://novanet.no/kontakt/) if you'd like to explore how Event Modeling could work in your context. We run workshops, and we're happy to help you get started.
