@@ -1,6 +1,6 @@
 # Video Script: Stop Guessing. Start Modeling.
 
-**Duration:** ~90 seconds  
+**Duration:** ~2 minutes  
 **Tone:** Direct, confident, conversational
 
 ---
@@ -12,7 +12,7 @@ They fail because the team built the wrong thing — or built the right thing, b
 
 ---
 
-## [PROBLEM — 0:10–0:25]
+## [PROBLEM — 0:10–0:22]
 
 A product owner, a developer, and a domain expert sit in a meeting.
 They all walk out thinking they understood each other.
@@ -22,42 +22,72 @@ That's expensive. And it's avoidable.
 
 ---
 
-## [WHAT IS IT — 0:25–0:45]
+## [WHAT IS IT — 0:22–0:38]
 
 Event Modeling is a way to design systems using a shared timeline.
 Instead of describing what your system *is* — you describe what it *does*, as a story that unfolds over time.
 
-It only uses three building blocks:
-**Events** — things that happened.
-**Commands** — things a user wants to do.
-**Read Models** — how the system informs the user.
-
-That's it.
+Three building blocks:
+**Events** — things that happened. `RoomBooked`. `PaymentProcessed`.
+**Commands** — things a user wants to do. `BookRoom`. `ProcessPayment`.
+**Read Models** — how the system shows the user what's going on.
 
 ---
 
-## [WHY IT MATTERS — 0:45–1:05]
+## [THE FOUR PATTERNS — 0:38–1:05]
 
-Every workflow in your system follows the same loop:
-A command comes in, an event gets recorded, a read model gets updated.
+Those three blocks combine into four patterns — and that's the entire vocabulary.
 
-The language of the model is the language of the business.
-Developers, domain experts, product owners — everyone looks at the same canvas and understands it.
-Not diagrams written by developers for developers. A shared blueprint for the whole team.
+**State Change** — a user fires a command, it gets validated, an event is recorded.
+*[show: CheckIn → CheckinCompleted]*
+
+**State View** — events are projected into a read model the UI displays. Rebuild it at any time just by replaying the events.
+*[show: RoomAssigned + CheckinCompleted → Visitor read model]*
+
+**Automation** — a processor watches a read model, picks up items, fires a command. No human involved.
+*[show: CleaningSchedule read model → ScheduleCleaning command]*
+
+**Translator** — when an external system feeds you events you don't own, you translate them into your own language.
+*[show: GPS coordinates → GuestLeftHotel]*
+
+Any workflow in any system is some combination of these four. Once you recognise them, you see them everywhere.
 
 ---
 
-## [BUSINESS VALUE — 1:05–1:20]
+## [QUICK MODELING DEMO — 1:05–1:40]
 
-And here's why this matters commercially:
-Done right, Event Modeling keeps the cost of each new feature roughly constant — no matter how much has already been built.
-That means reliable estimates, predictable delivery, and no more "it depends."
+Let's model something right now. A hotel check-in. Two slices.
+
+*[screen: blank canvas]*
+
+Slice one — Assign Room.
+Command: `AssignRoom`. It goes in, gets validated — is the room available? — and if so, we record: `RoomAssigned`.
+
+*[show AssignRoom → RoomAssigned on timeline]*
+
+Slice two — Check In.
+Command: `CheckIn`. We read the `RoomAssigned` event to validate the guest is expected, and record: `CheckinCompleted`.
+
+*[show CheckIn → CheckinCompleted]*
+
+Now the read side. We project `RoomAssigned` and `CheckinCompleted` into a `Visitor` read model — that's what the front desk screen displays.
+
+*[show events → Visitor read model]*
+
+Two slices. A developer knows exactly what to build. A product owner can point at the screen and say "what shows up here?" Everyone's looking at the same thing.
 
 ---
 
-## [CALL TO ACTION — 1:20–1:30]
+## [BUSINESS VALUE — 1:40–1:52]
 
-If you're building something where alignment matters — reach out to us at Novanet.
-We run workshops, and we're happy to help you get started.
+Done right, each new workflow step costs roughly the same — regardless of how much has already been built.
+Reliable estimates. Predictable delivery. No more "it depends."
+
+---
+
+## [CALL TO ACTION — 1:52–2:00]
+
+Reach out to us at Novanet if you'd like to explore this.
+We run workshops. We're happy to help you get started.
 
 Stop guessing. Start modeling.

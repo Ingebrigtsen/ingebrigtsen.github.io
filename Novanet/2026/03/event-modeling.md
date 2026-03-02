@@ -138,7 +138,7 @@ If you want to understand event sourcing more, I'd recommend [Martin Dilger's bo
 
 You can absolutely do Event Modeling with sticky notes on a wall or on a shared whiteboard tool. For remote teams and more complex systems, dedicated tooling helps.
 
-We're building [Cratis Studio](https://cratis.studio) specifically for this. It supports the full Event Modeling workflow — brainstorming, layout, team collaboration in real time, read model projections, and code generation for C# commands, events, and projections. The goal is to keep the model and the codebase in sync, rather than having the model become a historical artefact on a Confluence page nobody visits.
+I'm part of the a team building out something called [Cratis Studio](https://cratis.studio) specifically for this. It supports the full Event Modeling workflow — brainstorming, layout, team collaboration in real time, read model projections, and code generation for C# commands, events, and projections. The goal is to keep the model and the codebase in sync, rather than having the model become a historical artefact on a Confluence page nobody visits.
 
 It's built on top of [Cratis Chronicle](https://cratis.io), an open-source event sourcing platform for .NET — so if you're going all in on the event sourcing side as well, the stack is coherent from design to deployment.
 
