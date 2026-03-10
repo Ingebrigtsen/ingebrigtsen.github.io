@@ -161,6 +161,80 @@ Each side of the transfer is protected at exactly the event types relevant to it
 shared aggregate that must "own" both accounts. The boundary is the scope needed to make a correct
 decision — nothing more.
 
+## Declaring concurrency intent on commands
+
+The raw `ConcurrencyScope` API gives you full control, but in most cases you should not have
+to build scopes manually. Arc lets you declare the concurrency intent directly on the command
+record using attributes, and Chronicle constructs the scope automatically when `Handle()` returns
+events.
+
+Three attributes are available — each with a dual purpose: they tag the appended events with
+metadata *and*, when `concurrency: true` is set, contribute that dimension to the concurrency
+scope:
+
+- **`[EventSourceType]`** — scopes to an overarching concept such as `"Customer"` or `"BankAccount"`.
+- **`[EventStreamType]`** — scopes to a named stream type, e.g. `"Transactions"` or `"Onboarding"`.
+- **`[EventStreamId]`** — scopes to a specific stream id within a stream type.
+
+A payment command that should only compete with other payment events on the same account looks
+like this:
+
+```csharp
+[Command]
+[EventStreamType("Transactions", concurrency: true)]
+public record ProcessPayment(EventSourceId AccountId, decimal Amount)
+{
+    public PaymentProcessed Handle() => new(AccountId, Amount);
+}
+```
+
+You can combine attributes to build a more precise boundary. Only the attributes marked
+`concurrency: true` contribute to the scope — the others still tag the events but do not
+tighten the boundary:
+
+```csharp
+[Command]
+[EventStreamId("customer-profile", concurrency: true)]
+[EventStreamType("Profile", concurrency: true)]
+[EventSourceType("Customer", concurrency: true)]
+public record UpdateCustomerProfile(EventSourceId CustomerId, string DisplayName, string Email)
+{
+    public IEnumerable<object> Handle() =>
+    [
+        new CustomerDisplayNameChanged(CustomerId, DisplayName),
+        new CustomerEmailChanged(CustomerId, Email)
+    ];
+}
+```
+
+If no attribute has `concurrency: true` the append proceeds without any optimistic concurrency
+check — appropriate for fire-and-forget writes where contention is not a concern.
+
+When the event stream id is only known at runtime rather than as a compile-time constant,
+implement `ICanProvideEventStreamId` and return the value from `GetEventStreamId()`:
+
+```csharp
+[Command]
+[EventStreamType("Reporting", concurrency: true)]
+public record GenerateMonthlyReport(EventSourceId AccountId, string MonthKey)
+    : ICanProvideEventStreamId
+{
+    public EventStreamId GetEventStreamId() => MonthKey;
+
+    public MonthlyReportGenerated Handle() => new(AccountId, MonthKey);
+}
+```
+
+The full details of how Arc resolves and builds the scope are in the
+[Arc concurrency documentation](https://www.cratis.io/docs/Arc/backend/chronicle/commands/concurrency.html).
+
+What this pattern achieves at the design level is significant: the concurrency boundary is
+visible at a glance on the command record itself. You do not need to trace through a builder
+call or look inside an aggregate to understand what consistency contract a command makes. The
+command is a vertical slice — it carries its own decision rules (via read model injection),
+its own business logic (`Handle`), and its own concurrency scope (via attributes) — all in one
+place and all with the minimum footprint needed for that specific operation.
+
 ## Projections join the picture
 
 Constraints and concurrency scopes protect the write side. The read side is equally important:
@@ -265,26 +339,6 @@ read models — keeps each operation aligned with exactly the data it needs. The
 less contention, and the design is easier to evolve because each command's consistency
 requirements are expressed locally rather than accumulated inside a shared object.
 
-## How this compares to the Critter Stack
-
-Jeremy Miller recently [wrote about DCB usage in the Critter Stack](https://www.linkedin.com/pulse/dynamic-consistency-boundary-usage-critter-stack-jeremy-miller-zjrec/),
-the Marten and Wolverine ecosystem. The Critter Stack is excellent and Jeremy and the team
-have thought deeply about event sourcing patterns. Their approach to DCB leans on Marten's
-aggregate/event stream model as the primary vehicle, with DCB as an advanced pattern applied
-selectively on top.
-
-The emphasis is different. The Critter Stack's home is the aggregate. DCB is applied where
-aggregates would be too constraining. Chronicle's home is the DCB. Aggregates are available
-for those who want them.
-
-Neither position is wrong. They reflect different defaults and different trade-offs. If your
-team is deeply comfortable with aggregate roots and you want a proven, aggregate-centric
-foundation with DCB available as an escape hatch, the Critter Stack is a strong choice.
-
-If you want a foundation where vertical slices, constraints, and projection-backed decisions
-are the idiomatic pattern from day one — with aggregate roots available when they genuinely
-fit — that is what Chronicle is designed to be.
-
 ## Further reading
 
 - [Dynamic Consistency Boundary — Overview](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/index.html)
@@ -292,6 +346,7 @@ fit — that is what Chronicle is designed to be.
 - [Constraints](https://www.cratis.io/docs/Chronicle/constraints/index.html)
 - [Constraints — C# usage](https://www.cratis.io/docs/Chronicle/constraints/dotnet-client.html)
 - [Concurrency scopes](https://www.cratis.io/docs/Chronicle/events/concurrency.html)
+- [Arc command concurrency attributes](https://www.cratis.io/docs/Arc/backend/chronicle/commands/concurrency.html)
 - [Projections](https://www.cratis.io/docs/Chronicle/projections/index.html)
 - [Arc read models](https://www.cratis.io/docs/Arc/backend/chronicle/read-models.html)
 - [dcb.events](https://dcb.events)
