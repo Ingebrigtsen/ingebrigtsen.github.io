@@ -297,7 +297,18 @@ assignments?".
 In [Arc](https://www.cratis.io/docs/Arc/backend/chronicle/read-models.html), the application
 framework built on Chronicle, read models produced by projections can be injected directly
 as dependencies into command handlers and command validators. The identity of which read model
-instance to load is resolved automatically from the command's `[Key]` property:
+instance to load is resolved automatically. Arc uses two mechanisms for this, applied in order:
+
+1. **By convention** — if the command has a property whose type is `EventSourceId` or any type
+   that inherits from it, that value is used as the event source identity. No attribute is required.
+2. **By `[Key]` attribute** — mark any property with `[Key]` and Arc will use that value as the
+   identity regardless of its type.
+
+The convention-based resolution is handled by the
+[`EventSourceValuesProvider`](https://www.cratis.io/docs/Arc/backend/chronicle/event-source-values-provider.html),
+which inspects the command and adds the resolved identity to the command context so all downstream
+Chronicle services — aggregate resolution, read model loading, and concurrency scoping — see the
+same identity without any custom plumbing.
 
 ```csharp
 public record PlaceOrderCommand([Key] Guid OrderId, Guid CustomerId, OrderLine[] Items)
@@ -376,4 +387,5 @@ requirements are expressed locally rather than accumulated inside a shared objec
 - [Arc command concurrency attributes](https://www.cratis.io/docs/Arc/backend/chronicle/commands/concurrency.html)
 - [Projections](https://www.cratis.io/docs/Chronicle/projections/index.html)
 - [Arc read models](https://www.cratis.io/docs/Arc/backend/chronicle/read-models.html)
+- [Arc Event Source Values Provider](https://www.cratis.io/docs/Arc/backend/chronicle/event-source-values-provider.html)
 - [dcb.events](https://dcb.events)
