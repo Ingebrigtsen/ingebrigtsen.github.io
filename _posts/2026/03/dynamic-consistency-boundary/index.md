@@ -162,7 +162,6 @@ that are indexed and used when evaluating concurrency scopes:
 | `EventSourceType` | Overarching concept (e.g. `Account`) |
 | `EventStreamType` | A concrete process on the source (e.g. `Transactions`) |
 | `EventStreamId` | Separates independent sub-streams (e.g. `2026-03`) |
-| `EventTypes` | Specific event types for fine-grained scoping |
 
 When appending events that involve multiple event sources — a money transfer between two
 accounts, for instance — you can supply per-source concurrency scopes:
