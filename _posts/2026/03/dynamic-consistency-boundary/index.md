@@ -35,6 +35,33 @@ drifts further from the actual business rules it was meant to reflect.
 DCB flips this around. The boundary is not a static design decision — it emerges from each
 individual command's decision requirements.
 
+## Coupling and vertical slices
+
+One of the quieter benefits of DCB is what it does to coupling.
+
+The classic aggregate root is a horizontal structure: a single object owns a cluster of state
+and every operation that touches that state goes through it. Over time the aggregate accumulates
+fields, methods, and invariants that belong to different features — they share the boundary
+because they share the noun, not because they share a consistency requirement. Changing one
+feature risks touching code that another feature depends on. The aggregate becomes a coupling
+magnet.
+
+Vertical slices cut the other way: each command is a self-contained unit. It reads the
+projections it actually needs, enforces the constraints relevant to its own decision, and
+expresses its concurrency scope narrowly. The next command is a separate slice with its own
+footprint. They overlap only where the business domain genuinely demands it, not by accident
+of object design.
+
+DCB gives vertical slices their consistency backbone. Without some form of dynamic scoping
+you are forced to either share a coarse aggregate (horizontal coupling) or accept weaker
+guarantees (optimistic writes with no real guard). DCB lets each slice declare exactly what
+consistency it needs and have the store enforce it — nothing more, nothing less.
+
+The practical result is that adding or changing a feature tends to stay contained. A new
+command introduces its own read model, its own constraints, and its own concurrency scope.
+It does not need to fit inside an existing aggregate or widen an existing boundary. The
+consistency surface area grows with the feature, not ahead of it.
+
 ## Chronicle was built with this in mind
 
 [Chronicle](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/chronicle.html) predates
