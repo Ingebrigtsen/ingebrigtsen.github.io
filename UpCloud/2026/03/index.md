@@ -209,6 +209,60 @@ This is the kind of thing that only shows up when you actually deploy — the Pu
 
 ---
 
+## Automating the deployment
+
+Getting infrastructure to work manually is only half the job. The other half is making sure it stays working automatically. We set up three GitHub Actions workflows that together form the complete CI/CD pipeline.
+
+```mermaid
+flowchart LR
+    subgraph Triggers
+        PUSH[Push to main\nDeployment/** changed]
+        DISPATCH_DEV[workflow_dispatch]
+        PUBLISH[Push to main]
+    end
+
+    subgraph Workflows
+        WF_DEV[deploy-development]
+        WF_PROD[deploy-production]
+        WF_PUB[publish]
+    end
+
+    subgraph Targets
+        ENV_DEV[UpCloud development\npulumi up --stack development]
+        ENV_PROD[UpCloud production\npulumi up --stack production]
+        DOCKERHUB[DockerHub\ncore / admin / lobby images]
+    end
+
+    PUSH --> WF_DEV --> ENV_DEV
+    DISPATCH_DEV --> WF_DEV
+    DISPATCH_DEV --> WF_PROD --> ENV_PROD
+    PUBLISH --> WF_PUB --> DOCKERHUB
+```
+
+**`deploy-development`** triggers automatically whenever changes to the `Deployment/` directory land on `main`. It installs the Pulumi CLI, runs `pulumi up` against the `development` stack, and uses GitHub's environment protection model to scope the secrets. A `concurrency` group with `cancel-in-progress: false` ensures deploys queue rather than stomp each other.
+
+**`deploy-production`** is intentionally manual — `workflow_dispatch` only. It accepts an optional tag input; if none is given, it auto-generates a `YYYY.MM` version tag (incrementing a patch number if the month already has a release) and pushes it back to the repository. Production deployments are deliberate, not automatic.
+
+**`publish`** handles Docker images. On every push to `main` it builds `core`, `admin`, and `lobby` images for both `linux/amd64` and `linux/arm64` and pushes them to DockerHub. The development cluster pulls the `latest-development` tag; production gets versioned tags matched to the release.
+
+One thing worth calling out: the `UPCLOUD_TOKEN` secret is preferred, but the workflow falls back gracefully to `UPCLOUD_USERNAME` / `UPCLOUD_PASSWORD` if the token isn't set. That pattern kept us from breaking anything while we were iterating on the auth approach early on.
+
+---
+
+## Documentation as a first-class deliverable
+
+One of the better decisions we made was to treat the setup documentation as a first-class part of the deployment — not something to write at the end, but something to keep accurate throughout.
+
+We keep a `setup.md` file that covers every manual step required to go from a fresh clone to a running system: UpCloud API credentials, Pulumi state backend configuration, GitHub environment secrets, first-time secret seeding, kubeconfig setup, DNS configuration, and CA trust for the private registry. It's the kind of guide where one missing step means a confused second person spending an hour debugging what you already solved.
+
+We updated it every time something changed — and things changed often. When `pulumi up` started automating NGINX and cert-manager setup that had previously been manual, the docs were updated immediately. When we discovered the load balancer uses a hostname rather than an IP, the DNS section was corrected. When the dashboard moved from a subpath to its own subdomain, the guide reflected that before the next person touched it.
+
+The discipline is simple: if you had to figure something out, document it now, before you forget what the confusion actually was. The person who most benefits from good documentation is you, three months later.
+
+We'd recommend the same approach to anyone setting up infrastructure like this: write the setup guide alongside the code, treat every debug session as a documentation opportunity, and use the AI assistant to keep things in sync — it's genuinely useful for that specific task.
+
+---
+
 ## Copilot as co-pilot
 
 We ran GitHub Copilot throughout the entire deployment process. It drove the initial Pulumi structure (from a GitHub Issue we raised with the full requirements), helped debug each error we encountered, and kept the documentation in sync with reality.
