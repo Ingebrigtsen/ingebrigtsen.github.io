@@ -46,9 +46,11 @@ We also had GitHub Copilot along for the whole ride. More on that in a moment.
 
 ## The journey
 
-### First surprise: credentials had changed
+### First check: verify your auth setup against the current dashboard
 
-The very first thing we hit was that UpCloud's authentication model had recently changed. The old username/password approach we'd seen documented elsewhere was no longer the way to do it. UpCloud had moved to API tokens. Not a blocker, but an immediate reminder that documentation — including official docs — drifts, and that the current dashboard is the source of truth.
+The very first thing we hit wasn't really an UpCloud problem — it was ours. The initial Pulumi code that had been scaffolded for us was using an older subaccount-based credential approach. UpCloud's API token documentation was current and easy to find; we just hadn't cross-checked the generated code against it before running. Once we did, switching to API tokens was straightforward.
+
+The lesson isn't about UpCloud's documentation drifting — it's a reminder to verify your tooling's assumptions against the current platform before you start. Especially when AI-generated scaffolding is involved: it reflects what the model was trained on, not necessarily what shipped yesterday.
 
 ### Setting up the registry
 
@@ -58,11 +60,9 @@ Getting Docker to trust that certificate across machines turned out to be the tr
 
 ### Kubernetes: CIDR surprises
 
-Standing up the cluster itself was mostly smooth once we had the configuration right. We hit two bumps.
+Standing up the cluster itself was mostly smooth once we had the configuration right. We hit one bump worth noting.
 
-First: the zone name. We'd used `no-osl1` based on what we'd seen elsewhere. It doesn't exist. The correct name for the Norway zone is `no-svg1`. Simple fix, but it burns time.
-
-Second: network CIDR overlap. UpCloud has a default private network in the `10.0.0.0/8` range, and our initial cluster network config used `10.0.0.0/24`, which overlapped directly with it. We had to choose a non-conflicting range. Again, simple in hindsight.
+Network CIDR overlap. UpCloud has a default private network in the `10.0.0.0/8` range, and the initial cluster network config used `10.0.0.0/24`, which overlapped directly with it. We had to choose a non-conflicting range. Simple in hindsight, but it cost a failed deploy to find out.
 
 ### The backup chicken-and-egg problem
 
@@ -153,7 +153,7 @@ The platform is solid. The Kubernetes offering is straightforward, and the integ
 The specific things that caught us, so they don't catch you:
 
 - **Check the dashboard for current auth requirements.** API credential formats can drift from what older documentation describes. The UpCloud dashboard is the source of truth.
-- **Zone naming is exact.** `no-osl1` doesn't exist; `no-svg1` does. Small thing, but worth verifying before your first deploy.
+- **Watch for CIDR conflicts.** UpCloud's default private network uses `10.0.0.0/8`. Make sure your cluster network config doesn't overlap.
 - **Let's Encrypt requires TCP passthrough.** The CCM defaults to L7 HTTPS on the load balancer. You need to explicitly configure TCP mode via the `service.beta.kubernetes.io/upcloud-load-balancer-config` annotation — and the JSON format matters precisely.
 - **Load balancer annotations only apply at creation time.** If you change the annotation on an existing service, nothing happens. You have to delete the service and let UpCloud reprovision the LB from scratch.
 
@@ -165,4 +165,4 @@ For teams that take data sovereignty seriously — and I believe more teams shou
 
 ## About the author
 
-**Einar Ingebrigtsen** is a principal architect at [Novanet](https://novanet.no), a Norwegian software consultancy, and the creator of [Cratis](https://github.com/cratis) — an open-source event sourcing and CQRS platform for .NET. He has spent over two decades building distributed systems and advising organizations on cloud architecture, developer experience, and software design. He writes at [ingebrigtsen.io](https://ingebrigtsen.io).
+**Einar Ingebrigtsen** is a technical advisor at [Novanet](https://novanet.no), a Norwegian software consultancy, and the creator of [Cratis](https://cratis.io) — an open-source event sourcing and CQRS platform for .NET. He has spent over two decades building distributed systems and advising organizations on cloud architecture, developer experience, and software design. He writes at [ingebrigtsen.blog](https://ingebrigtsen.blog).
