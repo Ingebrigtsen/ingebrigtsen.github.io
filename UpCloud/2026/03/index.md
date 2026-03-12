@@ -32,6 +32,40 @@ The deployment we needed wasn't trivial. Beyond the application itself, we requi
 
 Two environments: `development` (from the `development` branch) and `production` (from `main`).
 
+Here's how it all fits together:
+
+```mermaid
+graph TD
+    subgraph UpCloud
+        LB[Load Balancer\nTCP passthrough]
+        subgraph Kubernetes Cluster
+            NGINX[NGINX Ingress + cert-manager]
+            subgraph studio-development namespace
+                APP[Core / Lobby / Admin]
+                MONGO[MongoDB]
+                OTEL[OTel Collector]
+                LOKI[Loki]
+                GRAFANA[Grafana]
+            end
+            DASHBOARD[Kubernetes Dashboard]
+            PROXY_ADMIN[OAuth2-Proxy\nadmin team]
+            PROXY_OPS[OAuth2-Proxy\noperations team]
+        end
+        REGISTRY[Docker Registry VM\nfloating IP]
+        OBJSTORE[Object Storage\nMongoDB Backups]
+    end
+    INTERNET((Internet)) --> LB
+    LB --> NGINX
+    NGINX --> PROXY_ADMIN --> APP
+    NGINX --> PROXY_OPS --> GRAFANA
+    NGINX --> APP
+    NGINX --> LOKI
+    NGINX --> DASHBOARD
+    APP --> MONGO
+    APP --> OTEL --> LOKI
+    MONGO -- rolling backups --> OBJSTORE
+```
+
 ---
 
 ## Why Pulumi and why C#
@@ -70,7 +104,24 @@ This one was interesting. Our backup system writes to UpCloud Object Storage. To
 
 The naive answer is: create the bucket manually first, get your credentials, then paste them into config. We didn't love that.
 
-The better answer — which we implemented — was to have Pulumi create the bucket *and* generate the access keys as part of the same deployment. Pulumi's output system handles this elegantly: the keys become outputs of the storage resource and flow directly into the configuration of the backup system. No manual steps, no credentials to manage, no chicken, no egg.
+The better answer — which we implemented — was to have Pulumi create the bucket *and* generate the access keys as part of the same deployment. Pulumi's output system handles this elegantly: the keys become `Output<string>` properties on the storage component and flow directly into the downstream configuration. No manual steps, no credentials to manage, no chicken, no egg.
+
+```csharp
+var accessKey = new ManagedObjectStorageUserAccessKey(
+    $"backup-object-storage-access-key-{args.Environment}-g{args.AccessKeyGeneration}",
+    new ManagedObjectStorageUserAccessKeyArgs
+    {
+        ServiceUuid = managedObjectStorage.Id,
+        Username = userName,
+        Status = "Active",
+    },
+    new CustomResourceOptions { DependsOn = [backupUser] });
+
+AccessKeyId = Output.CreateSecret(accessKey.AccessKeyId);
+SecretAccessKey = Output.CreateSecret(accessKey.SecretAccessKey);
+```
+
+The `AccessKeyGeneration` config value is worth calling out: incrementing it rotates the credentials on the next deploy without touching the resource name prefix — a simple but explicit rotation mechanism.
 
 ### DNS: CNAME, not A record
 
@@ -86,22 +137,44 @@ We had cert-manager issuing Let's Encrypt certificates correctly. certs were app
 
 What was happening: UpCloud's cloud controller manager (CCM) was provisioning the load balancer with an HTTPS frontend — Layer 7 — using UpCloud's own default certificate. Traffic from the browser was being decrypted at the load balancer before it ever reached NGINX. Let's Encrypt was doing its job; NGINX was serving the right cert; the load balancer just wasn't letting it through.
 
-The fix was a single annotation on the NGINX controller's LoadBalancer service:
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant UpCloud LB
+    participant NGINX
+    participant cert-manager
 
-```json
-{
-  "frontends": {
-    "http": { "mode": "tcp", "port": 80, "default_backend": "http" },
-    "https": { "mode": "tcp", "port": 443, "default_backend": "https" }
-  },
-  "backends": {
-    "http":  { "port": 80,  "members": [{ "weight": 1 }] },
-    "https": { "port": 443, "members": [{ "weight": 1 }] }
-  }
-}
+    Note over UpCloud LB: ❌ Default: L7 HTTPS frontend
+    Browser->>UpCloud LB: HTTPS (SNI: dev.cratis.studio)
+    UpCloud LB-->>Browser: UpCloud's own LB certificate ← wrong
+
+    Note over UpCloud LB: ✅ After fix: TCP passthrough
+    Browser->>UpCloud LB: HTTPS (raw TCP)
+    UpCloud LB->>NGINX: TCP passthrough
+    NGINX-->>Browser: Let's Encrypt certificate ← correct
 ```
 
-Setting both frontends to `"mode": "tcp"` tells UpCloud's CCM to pass raw TCP connections through to NGINX rather than terminating TLS at the load balancer. cert-manager's certificates started being served correctly immediately after.
+The fix was setting TCP mode via an annotation on the NGINX controller's `LoadBalancer` service, expressed in Pulumi C# as:
+
+```csharp
+["service"] = new Dictionary<string, object>
+{
+    ["type"] = "LoadBalancer",
+    ["annotations"] = new Dictionary<string, string>
+    {
+        ["service.beta.kubernetes.io/upcloud-load-balancer-config"] =
+            """{"frontends":[
+                {"name":"https","port":443,"mode":"tcp","default_backend":"port-443"},
+                {"name":"http", "port":80, "mode":"tcp","default_backend":"port-80"}
+            ],"backends":[
+                {"name":"port-443","port":443},
+                {"name":"port-80", "port":80}
+            ]}""",
+    },
+},
+```
+
+Setting both frontends to `"mode": "tcp"` tells the CCM to pass raw TCP connections through to NGINX rather than terminating TLS at the load balancer. cert-manager's certificates started being served correctly immediately after.
 
 One wrinkle: the UpCloud CCM honors this annotation only at load balancer creation time. Modifying an existing service's annotations doesn't reconfigure the load balancer. We had to delete the Kubernetes service entirely, wait for UpCloud to deprovision the old load balancer, then let Pulumi recreate it with the correct annotation from the start. Not complicated, but not obvious.
 
@@ -124,7 +197,15 @@ The error message when you get this wrong points you at the admission webhook de
 
 We added the Kubernetes dashboard for operational visibility. The dashboard's Helm chart (version 1.7.0) no longer supports the `--base-href` flag, which broke the subpath approach we'd initially tried. The fix was to give the dashboard its own subdomain (`console.dev.cratis.studio`) covered by our wildcard certificate rather than hosting it under a path. Tidier anyway.
 
-One final small puzzle: the Helm release name for the dashboard gets a random hash suffix appended — `kubernetes-dashboard-development-fdaae6a3-kong-proxy` rather than the expected `kubernetes-dashboard-kong-proxy`. We had to use Pulumi's `.Apply()` to derive the correct service name at deploy time rather than hardcoding it.
+One final small puzzle: the Helm release name for the dashboard gets a random hash suffix appended — `kubernetes-dashboard-development-fdaae6a3-kong-proxy` rather than the expected `kubernetes-dashboard-kong-proxy`. You can't know this name statically, so you can't hardcode it in the ingress backend. The fix is to use Pulumi's `.Apply()` to derive it at deploy time from the release name itself:
+
+```csharp
+// Service name is the Helm release name + "-kong-proxy"
+// e.g. kubernetes-dashboard-development-fdaae6a3-kong-proxy
+Name = dashboardRelease.Name.Apply(n => $"{n}-kong-proxy"),
+```
+
+This is the kind of thing that only shows up when you actually deploy — the Pulumi preview passes fine because the release name resolves to the expected value when the resource is live.
 
 ---
 
