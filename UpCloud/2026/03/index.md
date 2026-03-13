@@ -207,6 +207,110 @@ Name = dashboardRelease.Name.Apply(n => $"{n}-kong-proxy"),
 
 This is the kind of thing that only shows up when you actually deploy — the Pulumi preview passes fine because the release name resolves to the expected value when the resource is live.
 
+### The load balancer hostname instability problem
+
+The CCM-provisioned load balancer has a hidden fragility we discovered the hard way: every time the NGINX Kubernetes service is deleted and recreated — which is the only way to apply a changed annotation, as noted earlier — the CCM treats it as a new service and provisions a *brand new* load balancer with a *brand new* random DNS hostname. Every CNAME record pointing at the old hostname breaks instantly.
+
+This isn't hypothetical: the cycle of delete-and-recreate that the TCP annotation fix required triggered it precisely once during our work, and having all DNS stop resolving mid-debugging session is a memorable experience.
+
+The fix is to invert ownership of the load balancer. Instead of letting the CCM provision it implicitly, pre-create the UpCloud load balancer as an explicit Pulumi `ClusterLoadBalancer` ComponentResource — complete with TCP frontends, backends, and static backend members pointing at every worker node. Then fix the NGINX NodePorts so the LB backend members' port references never drift between NGINX recreations:
+
+```csharp
+["nodePorts"] = new Dictionary<string, object>
+{
+    ["http"]  = args.HttpNodePort,   // fixed, e.g. 32080
+    ["https"] = args.HttpsNodePort,  // fixed, e.g. 32443
+},
+```
+
+The load balancer's `DnsName` is stable because the Pulumi resource itself persists across deploys. NGINX can be recreated as many times as needed without touching the DNS target. Point your CNAME records at the LB hostname once and never worry about it again.
+
+### Discovering node IPs automatically
+
+The Pulumi Kubernetes provider includes a `NodeList` resource type, and it looks like exactly the right tool for discovering worker node IPs at deploy time. It isn't: it's marked compatibility-only and cannot be used as a data source. Attempting to read from it blocks the deploy with a runtime exception about a required field.
+
+The working approach is `Pulumi.Command.Local.Command`, which runs `kubectl get nodes` against the cluster using the UpCloud-fetched kubeconfig. The IPs are sorted before indexing so that node1/node2 assignments remain stable across runs, and `ClusterId` is passed as a trigger so the command re-runs and returns fresh IPs whenever the cluster is recreated:
+
+```csharp
+var nodeIPsCommand = new Command(
+    $"get-node-ips-{args.Environment}",
+    new CommandArgs
+    {
+        Create = "kubectl get nodes -o jsonpath='{.items[*].status.addresses" +
+                 "[?(@.type==\"InternalIP\")].address}' --kubeconfig <(echo \"$KUBECONFIG_DATA\")",
+        Environment = new InputMap<string>
+        {
+            ["KUBECONFIG_DATA"] = args.Kubeconfig,
+        },
+        Triggers = [args.ClusterId],
+    });
+```
+
+The sorted IPs flow directly into the LB backend member configuration. No hardcoded IP addresses in stack config.
+
+### The oauth2-proxy Helm v7.x credentials trap
+
+This was the most subtle bug in the entire deployment, and the hardest to diagnose. We spent a full debugging session on it.
+
+The standard advice for keeping secrets out of Helm release history is to create a Kubernetes Secret separately and reference it via the `existingSecret` value. We followed this exactly — created a Pulumi `Secret` resource with the GitHub OAuth credentials, set `existingSecret` to its name. Everything deployed without errors.
+
+Then every OAuth authorization attempt returned a 404 from GitHub.
+
+The cause: `existingSecret` **does not work** in oauth2-proxy Helm chart v7.x. The chart unconditionally creates its own `{release-name}` Secret seeded from `config.clientID`, `config.clientSecret`, and `config.cookieSecret` — defaulting those values to the literal placeholder string `XXXXXXX`. The Deployment's env vars always reference that chart-managed Secret. Your separately-created Secret is created, runs cleanly, and is referenced nowhere.
+
+Both proxies were sending `client_id=XXXXXXX` to GitHub's authorize endpoint. GitHub accepts the URL (it shows the login page for any `client_id`), but returns 404 after the user logs in because no OAuth App with that ID exists. The error only appears in the browser after a full login cycle — there's nothing in the proxy logs, nothing in the Kubernetes events, nothing to indicate the credentials are wrong until you actually trace the raw redirect URL.
+
+The fix is to abandon `existingSecret` entirely and pass credentials directly in Helm values:
+
+```csharp
+["config"] = new Dictionary<string, object>
+{
+    ["clientID"]     = clientId,
+    ["clientSecret"] = clientSecret,
+    ["cookieSecret"] = cookieSecret,
+},
+```
+
+This means credentials appear in the Helm values that Pulumi stores in state. Pulumi marks them as secrets (they're `Output<string>` values wrapped with `Output.CreateSecret`), so they're encrypted in the state backend — not plaintext. It's a less clean separation than a standalone Secret, but it's the only option that actually works until the chart addresses this.
+
+If you're using oauth2-proxy Helm chart v7.x and `existingSecret`, your credentials are `XXXXXXX`. Check this before wondering why GitHub returns 404.
+
+### Cookie domain scoping for multiple proxies
+
+With two oauth2-proxy instances — one guarding admin endpoints, one guarding operations — their cookie domains need different scopes. The admin proxy intentionally uses a broad cookie domain (`.dev.cratis.studio`) so its session cookie covers all subdomains, including the dashboard. The operations proxy should use a narrower domain (`.operations.dev.cratis.studio`) to contain its sessions.
+
+A small bug in the Pulumi C# code applied the same subdomain-stripping formula to both:
+
+```csharp
+// Bug: both computed to .dev.cratis.studio
+var adminCookieDomain      = "." + string.Join('.', adminDomain.Split('.').Skip(1));
+var operationsCookieDomain = "." + string.Join('.', operationsDomain.Split('.').Skip(1));
+```
+
+The fix is direct:
+
+```csharp
+// Admin: broad, covers all subdomains including the dashboard
+var adminCookieDomain      = "." + string.Join('.', adminDomain.Split('.').Skip(1));
+// Operations: narrowed to its own subdomain
+var operationsCookieDomain = "." + operationsDomain;
+```
+
+The practical impact: the operations session cookie was being scoped to the entire `.dev.cratis.studio` domain. In a private cluster with carefully controlled access this isn't catastrophic, but it's wrong — sessions should be isolated to their respective proxies.
+
+### Kubernetes Dashboard: removing the second login prompt
+
+After oauth2-proxy validates GitHub team membership and passes the request through, the Kubernetes Dashboard still presents its own login screen asking for a Bearer token. This is a second authentication step with no additional security value — the GitHub gate already established who the person is and whether they're authorised.
+
+The fix is an NGINX `configuration-snippet` annotation on the dashboard ingress that injects the service account Bearer token automatically after oauth2-proxy passes the request:
+
+```csharp
+["nginx.ingress.kubernetes.io/configuration-snippet"] =
+    AdminToken.Apply(token => $"proxy_set_header Authorization \"Bearer {token}\";"),
+```
+
+This requires `allowSnippetAnnotations = true` and `annotations-risk-level = Critical` in the NGINX Helm values — already in place from the OAuth2 setup earlier. After this change, authenticated users land directly on the Dashboard UI with no additional prompts. The Bearer token remains accessible as a Pulumi stack output for direct API access and debugging; it's simply no longer something users ever need to handle manually.
+
 ---
 
 ## Automating the deployment
@@ -291,6 +395,11 @@ The specific things that caught us, so they don't catch you:
 - **Watch for CIDR conflicts.** UpCloud's default private network uses `10.0.0.0/8`. Make sure your cluster network config doesn't overlap.
 - **Let's Encrypt requires TCP passthrough.** The CCM defaults to L7 HTTPS on the load balancer. You need to explicitly configure TCP mode via the `service.beta.kubernetes.io/upcloud-load-balancer-config` annotation — and the JSON format matters precisely.
 - **Load balancer annotations only apply at creation time.** If you change the annotation on an existing service, nothing happens. You have to delete the service and let UpCloud reprovision the LB from scratch.
+- **Pre-create the load balancer as a Pulumi resource.** Letting the CCM provision it implicitly means every NGINX service deletion creates a *new* LB with a new hostname, breaking DNS. Create it explicitly, fix the NGINX NodePorts, and your CNAME records are stable forever.
+- **Pulumi's `NodeList` is not a data source.** The Kubernetes provider includes the type for compatibility but it cannot be read from at apply time. Use `Pulumi.Command.Local.Command` running `kubectl get nodes` instead — and pass `ClusterId` as a trigger so node IPs are refreshed when the cluster is recreated.
+- **oauth2-proxy Helm chart v7.x ignores `existingSecret`.** The chart creates its own release-named Secret with placeholder `XXXXXXX` values and always mounts that — not the Secret you created. The symptom is a GitHub 404 after login with nothing in the proxy logs. Pass `config.clientID`, `config.clientSecret`, and `config.cookieSecret` directly in Helm values instead.
+- **Cookie domains for multiple proxy instances need explicit scoping.** If you run both a broad admin proxy and a narrower operations proxy, verify the cookie domain formula independently for each. It's easy to apply the same stripping logic to both and silently produce the wrong scope.
+- **The Kubernetes Dashboard has its own login prompt behind your OAuth proxy.** Eliminate it with an NGINX `configuration-snippet` that injects the service account Bearer token automatically. GitHub team membership becomes the only gate.
 
 None of these are blockers. They're the kind of friction you hit once. After that, the deployment runs repeatably and everything behaves as expected.
 
