@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
-# Converts index.md in this directory to a PDF.
+# Converts a Markdown file to PDF.
 # Mermaid diagrams are pre-rendered to PNG via mmdc before pandoc runs.
 # Dependencies (pandoc, basictex, mmdc) are installed automatically if missing.
+#
+# Usage: ./to-pdf.sh <input.md> <output.pdf>
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INPUT="$SCRIPT_DIR/index.md"
-OUTPUT="${1:-$SCRIPT_DIR/upcloud-pulumi-deployment.pdf}"
+if [[ $# -lt 2 ]]; then
+  echo "Usage: $(basename "$0") <input.md> <output.pdf>" >&2
+  exit 1
+fi
+
+INPUT="$(realpath "$1")"
+# realpath requires the file to exist; resolve output relative to cwd manually
+if [[ "$2" = /* ]]; then
+  OUTPUT="$2"
+else
+  OUTPUT="$PWD/$2"
+fi
 TMPDIR_LOCAL="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR_LOCAL"' EXIT
 
