@@ -253,6 +253,22 @@ Reflect on the journey, summarize key points, or acknowledge uncertainty.
 ✅ **This (explains the journey):**
 "We tried out a bunch of different solutions but ended up using ILRepack with the ILRepack.Lib.MSBuild.Task on top. It provided the flexibility we needed for this to work. However, it didn't provide us with all the magic we needed."
 
+## LinkedIn Posts
+
+LinkedIn posts live in `LinkedIn/YYYY/MM/post-slug.md`. They follow a distinct format — shorter, punchier, and optimised for a scrolling feed — while keeping the same personal and opinionated voice.
+
+For detailed LinkedIn-specific guidance, see `.github/copilot/linkedin-writing-guide.md`.
+
+### Key differences from blog posts
+
+- **No frontmatter for layout** — just YAML with `date`, `title`, `tags`, and `published`
+- **No headers/subheaders** — the post is plain prose with paragraph breaks
+- **Hook-first** — the very first sentence must work as a standalone pull quote
+- **Shorter** — 150–300 words for the body; respect the reader's scroll
+- **Hashtags** — 4–6 at the end; they are part of the format, not an afterthought
+
+---
+
 ## Professional "Company" Blog Articles
 
 When writing for a company blog vs. a personal blog, the voice stays the same but the style is slightly more polished and persuasive. Key differences:
