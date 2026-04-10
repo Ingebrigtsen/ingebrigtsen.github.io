@@ -62,7 +62,7 @@ Databasesituasjonen var flerlaget. På enhetene bruker vi SQLite – en liten, r
 
 For hendelseshåndteringen hentet vi byggeblokkene fra [Cratis Chronicle](https://www.cratis.io/docs/Chronicle/index.html). Chronicle er et rammeverk for Event Sourcing i .NET-miljøer, og ga oss fundamentet vi trengte for å håndtere hendelsesstrømmene på en strukturert og robust måte. Prosjektet krevde imidlertid en egenutviklet projeksjonsmotor som dynamisk projiserer hendelser til visningsvennlig tilstand på toppen av Entity Framework Core – en løsning som kombinerer fleksibiliteten til Chronicle med den kjente ORM-tilnærmingen teamet allerede behersket godt.
 
-## Resultater
+## Resultatet
 
 EWA ble levert til kundeakseptansetesting i januar 2026 – på dato, som planlagt. Løsningen kjører på iOS, iPadOS, Android, Windows og i nettleseren fra én felles kodebase. Den fungerer fullt ut offline og synkroniserer automatisk når nettverket er tilgjengelig. Alle hendelser i systemet er sporbare, og pasientjournalen er konsistent på tvers av alle parter i et oppdrag – fra disponeringen på sykehuset til enheten i hendene på mannskapet ute i felten.
 
