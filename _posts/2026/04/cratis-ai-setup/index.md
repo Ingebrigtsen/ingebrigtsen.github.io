@@ -5,7 +5,7 @@ categories: [GitHub, DevOps, Copilot, Automation]
 tags: [github-actions, workflow-synchronization, ai-setup, multi-device-development]
 ---
 
-At Cratis, we work across lots of different devices — phones, iPads, Macs, random browsers, whatever's nearby. We use GitHub issues heavily because people register via issues and we want to assign them. That shapes how we optimize everything.
+When we're working with [Cratis](https://cratis.io), we work across lots of different devices — phones, iPads, Macs, random browsers, whatever's nearby. We use GitHub issues heavily because people register via issues and we want to assign them. That shapes how we optimize everything.
 
 One thing we've done is synchronize all our Copilot setup across repositories and devices. We structured it so you can edit the configuration in any repository and it automatically synchronizes everywhere. We often find small things that need fixing while we're working on something specific, so we just tell the model to fix the instructions, skills, or prompts — whatever needs it. When those changes merge to main, they automatically sync to all other repositories in the organization.
 
