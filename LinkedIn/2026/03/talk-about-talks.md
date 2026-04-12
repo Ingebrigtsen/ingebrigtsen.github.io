@@ -10,7 +10,7 @@ tags:
 published: false
 ---
 
-Yesterday I went full meta — and stepped outside my comfort zone. Not a tech talk 😅
+Yesterday I went full meta — and out of my comfort zone by not doing a tech talk 😅
 
 At Novanet we have our internal community evenings every third week where we share knowledge. Since conference season is upon us — which is honestly just a long, continuous, never-ending, 365-days-a-year season at this point — I did a talk on how I prepare for talks, build them, and present them.
 
