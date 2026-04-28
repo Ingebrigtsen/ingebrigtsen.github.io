@@ -117,7 +117,7 @@ When writing about technical topics, emphasize:
 ### Sentence Structure
 
 - Mix short and long sentences
-- Use dashes for asides: "We started a company - the combined work of..."
+- Avoid tankestreker in running prose; use commas, periods, or parentheses instead
 - Use contractions naturally: "it's", "don't", "won't", "I've"
 - Start sentences with conjunctions when it flows: "But it lacked...", "And it was..."
 - Use ellipsis for trailing thoughts: "And trust me, its been very busy."

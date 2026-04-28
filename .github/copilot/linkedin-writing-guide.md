@@ -3,17 +3,18 @@ applyTo: "LinkedIn/**"
 ---
 # LinkedIn Writing Guide - Einar's Style
 
-Use this when writing or editing LinkedIn posts. LinkedIn is a different medium than the blog, shorter, punchier, and built for scrolling. But it should still unmistakably sound like Einar.
+Use this when writing or editing LinkedIn posts. LinkedIn is a different medium than the blog. It is shorter, punchier, and built for scrolling. But it should still unmistakably sound like Einar.
 
 ---
 
 ## Core Principles
 
-1. **The hook is everything**, The first line is what people see before clicking "See more". Make it count. Bold claim, provocative question, or a surprising statement.
-2. **Short paragraphs**, One to three sentences max. White space is your friend on mobile.
-3. **Personal and opinionated**, Share a real perspective. LinkedIn rewards authenticity and strong (but fair) takes.
-4. **Concrete over abstract**, Always back up claims with specific examples, numbers, or real situations.
-5. **No corporate speak**, No "synergies", no "leverage", no "ecosystem". Write like a human.
+1. **The hook is everything**: The first line is what people see before clicking "See more". Make it count. Bold claim, provocative question, or a surprising statement.
+2. **Short paragraphs**: One to three sentences max. White space is your friend on mobile.
+3. **Personal and opinionated**: Share a real perspective. LinkedIn rewards authenticity and strong, but fair, takes.
+4. **Concrete over abstract**: Always back up claims with specific examples, numbers, or real situations.
+5. **No corporate speak**: No "synergies", no "leverage", no "ecosystem". Write like a human.
+6. **No tankestreker**: Avoid en dash and em dash in running text. Use commas, periods, or parentheses.
 
 ---
 
@@ -50,6 +51,7 @@ Wrap up with a reflection, a call to action, or a question to the reader. Invite
 - [ ] Opinionated but fair, uses "I would argue", "IMO", "the way I see it"
 - [ ] At least one concrete example, number, or real-world reference
 - [ ] No passive voice where active is clearer
+- [ ] No tankestreker in running text
 - [ ] Ends with something, a question, a reflection, or a CTA
 - [ ] 4-6 relevant hashtags
 
@@ -63,11 +65,11 @@ Aim for **150-300 words** for the visible body. LinkedIn truncates at roughly 20
 
 ## What to Avoid
 
-- Listicle baiting ("10 things you must know about..."), Einar's voice is essay-style, not clickbait
+- Listicle baiting ("10 things you must know about..."): Einar's voice is essay-style, not clickbait
 - Humblebragging wrapped in advice
-- Ending with "What do you think? Drop a comment below 👇", it's fine to invite discussion naturally but not mechanically
-- Excessive emoji, use sparingly, max 1-2 if at all
-- Generic takes that anyone could write, if it sounds like a press release or a LinkedIn influencer template, rewrite it
+- Ending with "What do you think? Drop a comment below 👇": it is fine to invite discussion naturally, but not mechanically
+- Excessive emoji: use sparingly, max 1-2 if at all
+- Generic takes that anyone could write: if it sounds like a press release or a LinkedIn influencer template, rewrite it
 
 ---
 

@@ -42,6 +42,7 @@ Choose what fits the post:
 - Overly formal language
 - Academic tone
 - Passive voice when active is clearer
+- Tankestreker in running text; prefer commas, periods, or parentheses
 - Unexplained jargon
 
 ## Content Flow
