@@ -255,17 +255,17 @@ Reflect on the journey, summarize key points, or acknowledge uncertainty.
 
 ## LinkedIn Posts
 
-LinkedIn posts live in `LinkedIn/YYYY/MM/post-slug.md`. They follow a distinct format — shorter, punchier, and optimised for a scrolling feed — while keeping the same personal and opinionated voice.
+LinkedIn posts live in `LinkedIn/YYYY/MM/post-slug.md`. They follow a distinct format, shorter, punchier, and optimised for a scrolling feed, while keeping the same personal and opinionated voice.
 
 For detailed LinkedIn-specific guidance, see `.github/copilot/linkedin-writing-guide.md`.
 
 ### Key differences from blog posts
 
-- **No frontmatter for layout** — just YAML with `date`, `title`, `tags`, and `published`
-- **No headers/subheaders** — the post is plain prose with paragraph breaks
-- **Hook-first** — the very first sentence must work as a standalone pull quote
-- **Shorter** — 150–300 words for the body; respect the reader's scroll
-- **Hashtags** — 4–6 at the end; they are part of the format, not an afterthought
+- **No frontmatter for layout**, just YAML with `date`, `title`, `tags`, and `published`
+- **No headers/subheaders**, the post is plain prose with paragraph breaks
+- **Hook-first**, the very first sentence must work as a standalone pull quote
+- **Shorter**, 150-300 words for the body; respect the reader's scroll
+- **Hashtags**, 4-6 at the end; they are part of the format, not an afterthought
 
 ---
 
@@ -275,7 +275,7 @@ When writing for a company blog vs. a personal blog, the voice stays the same bu
 
 ### Structure for a Persuasive/Educational Piece
 
-- Open with the **problem** — what goes wrong without this, why it matters
+- Open with the **problem**, what goes wrong without this, why it matters
 - Lead with the "why", then "what", then "how"
 - Use a clear narrative arc: problem → insight → solution → benefits → challenges → when to use → call to action
 - End with a **direct call to action** (e.g. "Reach out to us")
@@ -297,14 +297,14 @@ When writing for a company blog vs. a personal blog, the voice stays the same bu
 
 - Still personal and honest, but less self-deprecating than personal posts
 - Speak from experience ("I've seen it over and over") but represent the company ("We at Novanet can help...")
-- Accessible to non-developers — business stakeholders should follow along
-- Strong, confident opinions — but never dismissive of alternatives
+- Accessible to non-developers, business stakeholders should follow along
+- Strong, confident opinions, but never dismissive of alternatives
 
 ### Selling an Idea Without Being Salesy
 
 - Focus on the reader's pain, not the solution's features
 - Let benefits emerge from concrete examples rather than bullet-point claims
-- Acknowledge trade-offs and when something is *not* the right fit — this builds trust
+- Acknowledge trade-offs and when something is *not* the right fit, this builds trust
 - The closing call to action should feel like a natural next step, not a hard sell
 
 ---
