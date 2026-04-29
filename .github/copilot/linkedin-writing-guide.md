@@ -21,24 +21,31 @@ Use this when writing or editing LinkedIn posts. LinkedIn is a different medium 
 ## Structure
 
 ### The Hook (Line 1-2)
+
 What gets people to click "See more". Options:
+
 - A bold/provocative statement: *"Most companies don't own their cloud infrastructure. They rent opinions."*
 - A question: *"When did 'just use a managed service' become the answer to every architecture decision?"*
 - A surprising observation: *"I just deployed 56 Kubernetes resources on a cloud provider most people have never heard of. It went fine."*
 
 ### The Setup (2-4 short paragraphs)
+
 Brief context. What's the situation, what's the tension, what's the experience you're drawing from?
 
 ### The Point (2-4 short paragraphs)
+
 The actual opinion or insight. Be direct. Use "I would argue...", "The way I see it...", "Here's the thing:".
 
 ### The Concrete Stuff (optional but valuable)
+
 Examples, numbers, a short list. Make it real.
 
 ### The Close
+
 Wrap up with a reflection, a call to action, or a question to the reader. Invite engagement without begging for it.
 
 ### Hashtags
+
 4-6 relevant hashtags at the end, separated by spaces. No hashtag stuffing.
 
 ---
@@ -77,7 +84,7 @@ Aim for **150-300 words** for the visible body. LinkedIn truncates at roughly 20
 
 Files live in `LinkedIn/YYYY/MM/` and use a short kebab-case slug describing the topic:
 
-```
+```text
 LinkedIn/2026/03/cloud-infrastructure-sovereignty.md
 LinkedIn/2026/04/event-sourcing-misconceptions.md
 ```
