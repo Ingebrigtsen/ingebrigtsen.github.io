@@ -156,4 +156,4 @@ you can provide. Besides, you will help yourself as well by not having to suppor
 to clarity in the API surface. Hopefully it also leads to happier consumers of the things you create,
 which means they will be a natural advocate.
 
-Due to all this complexity, we had to write a [complete guide](https://www.cratis.io/docs/Chronicle/contributing/clients/internalization.html) on all the details of how this works.
+Due to all this complexity, we had to write a [complete guide](https://www.cratis.io/chronicle/contributing/clients/internalization/) on all the details of how this works.

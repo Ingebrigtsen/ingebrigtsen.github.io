@@ -41,7 +41,7 @@ You're not giving it the whole system. You're giving it one card on the event mo
 
 If you want to see what this looks like end to end, we have full guides that walk you through building with Cratis from scratch, following the conventions, slice by slice.
 
-https://www.cratis.io/docs/Guides/index.html
+https://www.cratis.io/arc/
 
 We also have a dedicated repository of Cratis-specific AI instructions and skills (https://github.com/cratis/ai) you can pull straight into your tooling. Give your LLM the context it needs to work *with* Cratis, not just *around* it.
 

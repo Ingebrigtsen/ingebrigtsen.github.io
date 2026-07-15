@@ -48,9 +48,9 @@ We landed on doing it all with C# and .NET for the backend and React Native for 
 use the opportunity to target all the platforms we needed.
 
 We used SQLite as database on the devices and supporting MSSQL and PostgreSQL when running on premise,
-leveraging the power of a library I am part of maintaining; Cratis Arc (https://www.cratis.io/docs/Arc/index.html).
+leveraging the power of a library I am part of maintaining; Cratis Arc (https://www.cratis.io/arc/).
 
-For event sourcing we leveraged building blocks from Cratis Chronicle (https://www.cratis.io/docs/Chronicle/index.html)
+For event sourcing we leveraged building blocks from Cratis Chronicle (https://www.cratis.io/chronicle/)
 with a custom projection engine, dynamically projecting on top of EntityFramework Core.
 
 ## Illustrations

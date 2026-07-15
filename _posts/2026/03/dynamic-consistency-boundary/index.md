@@ -15,7 +15,7 @@ tags:
 
 ## What is a Dynamic Consistency Boundary?
 
-A [Dynamic Consistency Boundary](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/index.html) (DCB)
+A [Dynamic Consistency Boundary](https://www.cratis.io/chronicle/dynamic-consistency-boundary/) (DCB)
 is a deceptively simple idea: consistency should be scoped to the *facts* a decision actually needs,
 not to a fixed object boundary drawn at design time.
 
@@ -64,7 +64,7 @@ consistency surface area grows with the feature, not ahead of it.
 
 ## Chronicle was built with this in mind
 
-[Chronicle](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/chronicle.html) predates
+[Chronicle](https://www.cratis.io/chronicle/dynamic-consistency-boundary/chronicle/) predates
 the DCB name, but the architecture maps cleanly onto its concepts. Events can be appended
 independently. Read models are built from projections over disparate streams. Consistency
 for the specific facts used to decide is enforced at append time through constraints and
@@ -82,7 +82,7 @@ This is not grafted on — it is how Chronicle works by default.
 ## Constraints: integrity without an aggregate root
 
 The most important building block for DCB in Chronicle is
-[constraints](https://www.cratis.io/docs/Chronicle/constraints/index.html).
+[constraints](https://www.cratis.io/chronicle/constraints/).
 
 Constraints are server-side rules evaluated inside the Chronicle Kernel *at append time*. Because
 they run in the kernel rather than in client code they are consistent regardless of which client
@@ -117,12 +117,12 @@ all past events for an entity, replaying state, and running the check in-process
 but it couples the integrity guarantee to a client-side object that can be bypassed, loaded
 incorrectly, or grow stale.
 
-Chronicle's [constraints documentation](https://www.cratis.io/docs/Chronicle/constraints/dotnet-client.html)
+Chronicle's [constraints documentation](https://www.cratis.io/chronicle/constraints/)
 covers the full C# usage including uniqueness across multiple event types.
 
 ## A fluid concurrency model
 
-Chronicle's [concurrency model](https://www.cratis.io/docs/Chronicle/events/concurrency.html)
+Chronicle's [concurrency model](https://www.cratis.io/chronicle/events/concurrency/)
 is designed to be as narrow or as broad as each decision requires. The central concept is
 `ConcurrencyScope` — a description of exactly which streams and event types must be checked
 together when a new event is appended.
@@ -153,7 +153,7 @@ Notice that the scope is scoped to *specific event types*. Operations on unrelat
 will not contend with this append at all. That is DCB in action: only the facts the decision
 depends on participate in consistency enforcement.
 
-Chronicle uses a set of [formalized metadata tags](https://www.cratis.io/docs/Chronicle/events/concurrency.html#formalized-metadata-tags-for-concurrency)
+Chronicle uses a set of [formalized metadata tags](https://www.cratis.io/chronicle/events/concurrency/#formalized-metadata-tags-for-concurrency)
 that are indexed and used when evaluating concurrency scopes:
 
 | Tag | Purpose |
@@ -252,7 +252,7 @@ public record GenerateMonthlyReport(EventSourceId AccountId, string MonthKey)
 ```
 
 The full details of how Arc resolves and builds the scope are in the
-[Arc concurrency documentation](https://www.cratis.io/docs/Arc/backend/chronicle/commands/concurrency.html).
+[Arc concurrency documentation](https://www.cratis.io/arc/backend/chronicle/commands/concurrency/).
 
 What this pattern achieves at the design level is significant: the concurrency boundary is
 visible at a glance on the command record itself. You do not need to trace through a builder
@@ -265,7 +265,7 @@ place and all with the minimum footprint needed for that specific operation.
 
 Constraints and concurrency scopes protect the write side. The read side is equally important:
 you need to *decide* before you can append, and decisions are made against facts. Those facts
-come from [projections](https://www.cratis.io/docs/Chronicle/projections/index.html).
+come from [projections](https://www.cratis.io/chronicle/projections/).
 
 What makes Chronicle's projection system particularly useful for DCB is that projections can
 join data from entirely different event streams into a single coherent read model. The
@@ -293,7 +293,7 @@ business rules that are better expressed as policy validation: "is the order in 
 permits this action?", "has the customer reached their limit?", "is this role still accepting
 assignments?".
 
-In [Arc](https://www.cratis.io/docs/Arc/backend/chronicle/read-models.html), the application
+In [Arc](https://www.cratis.io/arc/backend/chronicle/read-models/), the application
 framework built on Chronicle, read models produced by projections can be injected directly
 as dependencies into command handlers and command validators. The identity of which read model
 instance to load is resolved automatically. Arc uses two mechanisms for this, applied in order:
@@ -304,10 +304,10 @@ instance to load is resolved automatically. Arc uses two mechanisms for this, ap
    identity regardless of its type.
 
 The convention-based resolution is handled by the
-[`EventSourceValuesProvider`](https://www.cratis.io/docs/Arc/backend/chronicle/event-source-values-provider.html),
-which inspects the command and adds the resolved identity to the command context so all downstream
+`EventSourceValuesProvider`, which inspects the command and adds the resolved identity to the command context so all downstream
 Chronicle services — aggregate resolution, read model loading, and concurrency scoping — see the
-same identity without any custom plumbing.
+same identity without any custom plumbing. See the [Arc documentation](https://www.cratis.io/arc/backend/chronicle/)
+for more details.
 
 ```csharp
 public record PlaceOrderCommand([Key] Guid OrderId, Guid CustomerId, OrderLine[] Items)
@@ -360,7 +360,7 @@ without a single aggregate root in sight.
 
 ## Aggregate roots: supported, but not the goal
 
-Chronicle does [support aggregate roots](https://www.cratis.io/docs/Arc/backend/chronicle/aggregates/aggregate-roots.html)
+Chronicle does [support aggregate roots](https://www.cratis.io/arc/backend/chronicle/aggregates/aggregate-roots/)
 through Arc. They are a legitimate choice if you want that style, and Chronicle handles the
 event stream scoping and concurrency automatically when you use them.
 
@@ -378,13 +378,13 @@ requirements are expressed locally rather than accumulated inside a shared objec
 
 ## Further reading
 
-- [Dynamic Consistency Boundary — Overview](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/index.html)
-- [DCB in Chronicle](https://www.cratis.io/docs/Chronicle/dynamic-consistency-boundary/chronicle.html)
-- [Constraints](https://www.cratis.io/docs/Chronicle/constraints/index.html)
-- [Constraints — C# usage](https://www.cratis.io/docs/Chronicle/constraints/dotnet-client.html)
-- [Concurrency scopes](https://www.cratis.io/docs/Chronicle/events/concurrency.html)
-- [Arc command concurrency attributes](https://www.cratis.io/docs/Arc/backend/chronicle/commands/concurrency.html)
-- [Projections](https://www.cratis.io/docs/Chronicle/projections/index.html)
-- [Arc read models](https://www.cratis.io/docs/Arc/backend/chronicle/read-models.html)
-- [Arc Event Source Values Provider](https://www.cratis.io/docs/Arc/backend/chronicle/event-source-values-provider.html)
+- [Dynamic Consistency Boundary — Overview](https://www.cratis.io/chronicle/dynamic-consistency-boundary/)
+- [DCB in Chronicle](https://www.cratis.io/chronicle/dynamic-consistency-boundary/chronicle/)
+- [Constraints](https://www.cratis.io/chronicle/constraints/)
+- [Constraints — C# usage](https://www.cratis.io/chronicle/constraints/)
+- [Concurrency scopes](https://www.cratis.io/chronicle/events/concurrency/)
+- [Arc command concurrency attributes](https://www.cratis.io/arc/backend/chronicle/commands/concurrency/)
+- [Projections](https://www.cratis.io/chronicle/projections/)
+- [Arc read models](https://www.cratis.io/arc/backend/chronicle/read-models/)
+- [Arc Event Source Values Provider](https://www.cratis.io/arc/backend/chronicle/event-source-values-provider/)
 - [dcb.events](https://dcb.events)

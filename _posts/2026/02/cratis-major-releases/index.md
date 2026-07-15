@@ -35,7 +35,7 @@ Security takes center stage with **full TLS support** for the Kernel. TLS is now
 
 Beyond TLS, Chronicle now **requires authenticated clients in production**, ensuring only authorized applications can connect to your event store. The **Workbench also requires authenticated users**, protecting your development and debugging tools from unauthorized access.
 
-We've have our own authority into Chronicle, but you're not locked in - the system supports integration with external identity providers and authorities as well. All server configuration options, including authentication setup, are detailed in the [Chronicle hosting configuration documentation](https://www.cratis.io/docs/Chronicle/hosting/configuration/index.html).
+We've have our own authority into Chronicle, but you're not locked in - the system supports integration with external identity providers and authorities as well. All server configuration options, including authentication setup, are detailed in the [Chronicle hosting configuration documentation](https://www.cratis.io/chronicle/hosting/configuration/).
 
 ### Performance & Scalability Enhancements
 
@@ -49,8 +49,8 @@ We've made substantial improvements to performance and resource management:
 
 The developer experience has been enhanced in several ways:
 
-- **Static code analysis and code fixes** integrated into both [Chronicle](https://www.cratis.io/docs/Chronicle/code-analysis/index.html) and [Arc](https://www.cratis.io/docs/Arc/backend/code-analysis/index.html) ([Arc + Chronicle](https://www.cratis.io/docs/Arc/backend/chronicle/code-analysis/index.html)), helping you catch issues at compile time and follow best practices
-- **Comprehensive documentation** that's been completely revamped to be more consistent and approachable - all available at [cratis.io](https://cratis.io)
+- **Static code analysis and code fixes** integrated into both [Chronicle](https://www.cratis.io/chronicle/code-analysis/) and [Arc](https://www.cratis.io/arc/backend/code-analysis/) ([Arc + Chronicle](https://www.cratis.io/arc/backend/chronicle/code-analysis/)), helping you catch issues at compile time and follow best practices
+- **Comprehensive documentation** that's been completely revamped to be more consistent and approachable - all available at [cratis.io](https://www.cratis.io)
 - **Webhook-based observers** allowing arbitrary webhook endpoints to receive events
 - **Consistent tagging system** for artifacts like Reducers, Projections, ReadModels, Reactions, EventTypes, and appended events
 - Strongly typed event content - the `Content` property on `AppendedEvent` is now the actual deserialized type instead of `ExpandoObject`
